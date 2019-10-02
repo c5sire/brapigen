@@ -1,0 +1,32 @@
+#' brapi_{{name}}
+#'
+#' {{summary}}
+#'
+{{#aparam}}
+#' @param {{pname}}
+{{/aparam}}
+#'
+#' @details {{description}}
+#'
+#' @return data.frame
+#'
+{{#afamily}}
+#' @family {{fname}}
+{{/afamily}}
+#'
+#' @author brapir generator package
+#' @references \href{https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/{{version}}#/{{tag}}/{{verb}}_{{name}}
+#'
+#' @example
+#'
+#' @export
+brapi_{{name}} <- function({{params}}) {
+# check network
+# get url
+# get respones
+# convert response to table
+# show metadata
+# return result table
+out <- "x"
+class(out) <- "brapi_{{name}}"
+}
