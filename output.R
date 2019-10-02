@@ -1,4 +1,4 @@
-#' brapi_commoncropname
+#' brapi_commoncropnames
 #'
 #' List supported crops
 #'
@@ -17,12 +17,12 @@
 #' @family Crops
 #'
 #' @author brapir generator package
-#' @references \href{https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/1.3#/Crops/get_commoncropname
+#' @references \href{https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/1.3#/Crops/get_commoncropnames }
 #'
 #' @example
 #'
 #' @export
-brapi_commoncropname <- function(pageSize = '', page = '') {
+brapi_commoncropnames <- function(pageSize = '', page = '') {
 # check network
 # get url
 # get respones
@@ -30,5 +30,5 @@ brapi_commoncropname <- function(pageSize = '', page = '') {
 # show metadata
 # return result table
 out <- "x"
-class(out) <- "brapi_commoncropname"
+class(out) <- "brapi_commoncropnames"
 }
