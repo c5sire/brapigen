@@ -1,34 +1,41 @@
+### brapigen package needs to be build!
 brapi <- yaml::read_yaml(system.file("openapi/brapi_1.2.yaml", package = "brapigen"))
-library(magrittr)
-library(whisker)
-# create directory infrastructure
 
+### load required packages
+library(magrittr) # usethis::use_package(package = "magrittr")
+library(whisker)  # usethis::use_package(package = "whisker")
+
+### create directory infrastructure
 dir_b <- "../brapir"
 
-unlink(dir_b, recursive = T, force = T)
-list.files(dir_b, recursive = T)
+unlink(x = dir_b, recursive = TRUE, force = TRUE)
+list.files(path = dir_b, recursive = TRUE)
 
-
-dir.create(dir_b)
+dir.create(path = dir_b)
 dir_r <- file.path(dir_b, "R")
-dir.create(dir_r)
+dir.create(path = dir_r)
 
-file.copy("inst/templates/zzz.R", file.path(dir_r, "zzz.R"))
-# Descriptionlib
+### copy files
+file.copy(from = "inst/templates/zzz.R", to = file.path(dir_r, "zzz.R"))
 
+### Descriptionlib
 get_call_names <- function(brapi) {
   brapi$paths %>% names
 }
 
 get_call <- function(brapi, id_name) {
   brapi_names <- get_call_names(brapi)
-  nme <- brapi_names[stringr::str_detect(brapi_names, id_name)]
+  ## usethis::use_package(package = "stringr")
+  nme <- brapi_names[stringr::str_detect(string = brapi_names, pattern = id_name)]
   brapi$paths[nme][[1]]$get
 }
-acall <- get_call(brapi, "common")
-ades <- stringr::str_replace_all(acall$description, "\\n\\n", "\n#' ")
 
-template <- readLines("inst/templates/function_GET.mst")
+acall <- get_call(brapi = brapi, id_name = "common")
+ades <- stringr::str_replace_all(string = acall$description,
+                                 pattern =  "\\n\\n",
+                                 replacement =  "\n#' ")
+
+template <- readLines(con = "inst/templates/function_GET.mst")
 
 get_param_vector <- function(acall) {
   n <- length(acall$parameters)
@@ -38,44 +45,43 @@ get_param_vector <- function(acall) {
     res[i] <- paste0(p$name, " ",
                      p$type, "; required: ",
                      p$required, "; ",
-                     p$description
-                     )
+                     p$description)
   }
   return(res)
 }
 
-aparam <- get_param_vector(acall)
-aparam<- iteratelist(aparam, value = "pname")
+aparam <- get_param_vector(acall = acall)
+aparam <- iteratelist(x = aparam, value = "pname")
 
 get_param_string <- function(acall) {
   n <- length(acall$parameters)
   res <- character(n)
   for (i in 1:n) {
     p <- acall$parameters[[i]]$name
-    res[i] <- paste0( p, " = ''")
+    res[i] <- paste0(p, " = ''")
   }
   res <- paste(res, collapse = ", ")
   return(res)
 }
 
-params <- get_param_string(acall)
+params <- get_param_string(acall = acall)
 
 afamily <- c(
   "brapi_1.3",
-  acall$tag
+  acall$tags
 )
-afamily <- iteratelist(afamily, value = "fname")
-data <- list( name = "commoncropname"
-              , verb = "get"
-              , version = "1.3"
-              , tag = acall$tag
-              , summary = acall$summary
-              , params = params
-              , afamily = afamily
-              , aparam = aparam
-              , description = ades
 
-)
+afamily <- iteratelist(afamily, value = "fname")
+
+data <- list(name = "commoncropnames",
+             verb = "get",
+             version = "1.3",
+             tag = acall$tags,
+             summary = acall$summary,
+             params = params,
+             afamily = afamily,
+             aparam = aparam,
+             description = ades)
 
 writeLines(whisker.render(template, data), "./output.R")
 
