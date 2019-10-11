@@ -101,7 +101,7 @@ aCallParamVector <- function(aCall) {
 
 aCallParams <- aCallParamVector(aCall = aCall)
 
-aCallParams <- iteratelist(x = aCallParams, value = "pname")
+aCallParams <- whisker::iteratelist(x = aCallParams, value = "pname")
 
 aCallParams <- lapply(X = aCallParams,
                       FUN = function(el) {
@@ -116,11 +116,22 @@ aCallParamString <- function(aCall) {
   n <- length(aCall$parameters)
   res <- character(n)
   for (i in 1:n) {
-    p <- aCall$parameters[[i]]$name
-    ## check for parameter type needed
-    res[i] <- paste0(p, " = ''")
+    if ("deprecated" %in% names(aCall$parameters[[i]])) {
+      next()
+    } else {
+      if (aCall[["parameters"]][[i]][["name"]] == "page" | aCall[["parameters"]][[i]][["name"]] == "pageSize") {
+        p <- aCall[["parameters"]][[i]][["name"]]
+        res[i] <- paste(aCall[["parameters"]][[i]][["name"]], "=", as.integer(aCall[["parameters"]][[i]][["example"]]))
+      } else {
+        p <- aCall[["parameters"]][[i]][["name"]]
+        res[i] <- paste(aCall[["parameters"]][[i]][["name"]], "=", "''")
+      }
+    }
   }
   res <- paste(res, collapse = ", ")
+  res <- sub(pattern = "^, ",
+             replacement = "",
+             x = res)
   return(res)
 }
 
@@ -131,7 +142,7 @@ aCallFamily <- c(
   aCall$tags
 )
 
-aCallFamily <- iteratelist(aCallFamily, value = "fname")
+aCallFamily <- whisker::iteratelist(aCallFamily, value = "fname")
 
 aCallData <- list(name = aCall$name,
                   summary = aCall$summary,
