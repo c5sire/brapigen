@@ -65,7 +65,7 @@ aCallParams <- lapply(X = aCallParams,
                         lapply(X = el, FUN = function(elel) {
                           stringr::str_replace_all(string = elel,
                                                    pattern = "\\n\\n",
-                                                   replacement = "\n# ")
+                                                   replacement = "\n#' ")
                         })
                       })
 
