@@ -60,6 +60,15 @@ aCallParams <- aCallParamVector(aCall = aCall)
 
 aCallParams <- iteratelist(x = aCallParams, value = "pname")
 
+aCallParams <- lapply(X = aCallParams,
+                      FUN = function(el) {
+                        lapply(X = el, FUN = function(elel) {
+                          stringr::str_replace_all(string = elel,
+                                                   pattern = "\\n\\n",
+                                                   replacement = "\n# ")
+                        })
+                      })
+
 aCallParamString <- function(aCall) {
   n <- length(aCall$parameters)
   res <- character(n)
