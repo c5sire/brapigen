@@ -2,17 +2,17 @@
 #'
 #' {{summary}}
 #'
-{{#aparam}}
+{{#parameters}}
 #' @param {{pname}}
-{{/aparam}}
+{{/parameters}}
 #'
 #' @details {{description}}
 #'
 #' @return data.frame
 #'
-{{#afamily}}
+{{#family}}
 #' @family {{fname}}
-{{/afamily}}
+{{/family}}
 #'
 #' @author brapir generator package
 #' @references \href{https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/{{version}}#/{{tag}}/{{verb}}_{{name}} }{SwaggerHub}
@@ -20,7 +20,7 @@
 #' @example
 #'
 #' @export
-brapi_{{name}} <- function({{params}}) {
+brapi_{{name}} <- function({{arguments}}) {
 # check network
 # get url
 # get respones

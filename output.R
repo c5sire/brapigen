@@ -1,15 +1,18 @@
 #' brapi_commoncropnames
 #'
-#' List supported crops
+#' Get the Common Crop Names
 #'
-#' @param pageSize integer; required: FALSE; The size of the pages to be returned. Default is `1000`.
-#' @param page integer; required: FALSE; Which result page is requested. The page indexing starts at 0 (the first page is 'page'= 0). Default is `0`.
+#' @param page ; required: FALSE; Which result page is requested. The page indexing starts at 0 (the first page is 'page'= 0). Default is `0`.
+#' @param pageSize ; required: FALSE; The size of the pages to be returned. Default is `1000`.
+#' @param Authorization ; required: FALSE; HTTP HEADER - Token used for Authorization 
+
+&lt;strong&gt;Bearer {token_string} &lt;/strong&gt;
 #'
 #' @details List the common crop names for the crops available in a database server. 
 #' This call is **required** for multi-crop systems where data from multiple crops may be stored in the same database server. A distinct database server is defined by everything in the URL before &quot;/brapi/v1&quot;, including host name and base path.  
 #' This call is recommended for single crop systems to be compatible with multi-crop clients. For a single crop system the response should contain an array with exactly 1 element. 
 #' The common crop name can be used as a search parameter for Programs, Studies, and Germplasm.
-#' &lt;a href=&quot;https://test-server.brapi.org/brapi/v1/commonCropNames&quot;&gt; test-server.brapi.org/brapi/v1/commonCropNames&lt;/a&gt;
+#' test-server.brapi.org/brapi/v1/commonCropNames
 #'
 #' @return data.frame
 #'
@@ -22,7 +25,7 @@
 #' @example
 #'
 #' @export
-brapi_commoncropnames <- function(pageSize = '', page = '') {
+brapi_commoncropnames <- function(page = '', pageSize = '', Authorization = '') {
 # check network
 # get url
 # get respones
