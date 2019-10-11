@@ -1,4 +1,4 @@
-#' brapi_commoncropnames
+#' brapi_get_commoncropnames
 #'
 #' Get the Common Crop Names
 #'

@@ -1,4 +1,4 @@
-#' brapi_{{name}}
+#' brapi_{{verb}}_{{name}}
 #'
 #' {{summary}}
 #'
@@ -20,7 +20,7 @@
 #' @example
 #'
 #' @export
-brapi_{{name}} <- function({{arguments}}) {
+brapi_{{verb}}_{{name}} <- function({{arguments}}) {
 # check network
 # get url
 # get respones

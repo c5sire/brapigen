@@ -3,9 +3,14 @@
 brapiSpecs <- yaml::read_yaml(system.file("openapi/brapi_1.3.yaml",
                                      package = "brapigen"))
 
+### Packages to be added to DESCRIPTION
+### usethis::use_package(package = "magrittr")
+### usethis::use_package(package = "whisker")
+### usethis::use_package(package = "stringr")
+
 ### load required packages
-library(magrittr) # usethis::use_package(package = "magrittr")
-library(whisker)  # usethis::use_package(package = "whisker")
+library(magrittr)
+library(whisker)
 
 ### create directory infrastructure
 dir_b <- "../brapir"
@@ -26,13 +31,51 @@ fetchCallNames <- function(brapiSpecs) {
   brapiSpecs[["paths"]] %>% names
 }
 
+allCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
+allCallNames <- sub(pattern = "_",
+                    replacement = "",
+                    x = stringr::str_replace_all(
+                      string = stringr::str_replace_all(string = allCallNames,
+                                                        pattern = "/",
+                                                        replacement = "_"),
+                      pattern = stringr::regex("\\{|\\}"),
+                      replacement = ""))
+
+### Prior to 2019-10-11
+# getCall <- function(brapiSpecs, idName) {
+#   brapiCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
+#   ## usethis::use_package(package = "stringr")
+#   callName <- brapiCallNames[stringr::str_detect(string = brapiCallNames,
+#                                                  pattern = idName)]
+#   ## check type of the call and deprecation
+#   brapiSpecs[["paths"]][[callName]][["get"]]
+# }
+
+### intended to loop over allCallNames, where each element of the vector will be
+### used idName
 getCall <- function(brapiSpecs, idName) {
   brapiCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
-  ## usethis::use_package(package = "stringr")
-  callName <- brapiCallNames[stringr::str_detect(string = brapiCallNames,
-                                                 pattern = idName)]
-  ## check type of the call and deprecation
-  brapiSpecs[["paths"]][[callName]][["get"]]
+  allCallNames <- sub(pattern = "_",
+                      replacement = "",
+                      x = stringr::str_replace_all(
+                        string = stringr::str_replace_all(string = brapiCallNames,
+                                                          pattern = "/",
+                                                          replacement = "_"),
+                        pattern = stringr::regex("\\{|\\}"),
+                        replacement = ""))
+  idNumber <- which(allCallNames == idName)
+  callName <- brapiCallNames[idNumber]
+  ## Check for type of call and deprecation
+  if ("get" %in% names(brapiSpecs[["paths"]][[callName]])) {
+    if (!("Deprecated" %in% brapiSpecs[["paths"]][[callName]][["get"]][["tags"]])) {
+      aCall <- brapiSpecs[["paths"]][[callName]][["get"]]
+      aCall$verb <- "get"
+      aCall$name <- allCallNames[idNumber]
+      return(aCall)
+    }
+  } else {
+    return()
+  }
 }
 
 aCall <- getCall(brapiSpecs = brapiSpecs, idName = "commoncropnames")
@@ -84,22 +127,29 @@ aCallParamString <- function(aCall) {
 aCallArgs <- aCallParamString(aCall = aCall)
 
 aCallFamily <- c(
-  "brapi_1.3",
+  paste0("brapi_", brapiSpecs[["info"]][["version"]]),
   aCall$tags
 )
 
 aCallFamily <- iteratelist(aCallFamily, value = "fname")
 
-aCallData <- list(name = "commoncropnames",
+aCallData <- list(name = aCall$name,
                   summary = aCall$summary,
                   parameters = aCallParams,
                   description = aCallDesc,
                   family = aCallFamily,
                   arguments = aCallArgs,
-                  verb = "get",
-                  version = "1.3",
+                  verb = aCall$verb,
+                  version = brapiSpecs[["info"]][["version"]],
                   tag = aCall$tags)
+
+template <- readLines(con = "inst/templates/function_name.mst")
+
+functionName <- whisker::whisker.render(template = template,
+                                        data = aCallData)
 
 template <- readLines(con = "inst/templates/function_GET.mst")
 
-writeLines(whisker.render(template, aCallData), "./output.R")
+writeLines(text = whisker::whisker.render(template = template,
+                                          data = aCallData),
+           con = paste0(dir_r, "/", functionName, ".R"))
