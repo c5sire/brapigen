@@ -2,6 +2,7 @@
 #'
 #' {{summary}}
 #'
+#' @param con list; required: TRUE; BrAPI connection object
 {{#parameters}}
 #' @param {{pname}}
 {{/parameters}}
@@ -20,8 +21,9 @@
 #' @example
 #'
 #' @export
-brapi_{{verb}}_{{name}} <- function({{arguments}}) {
+brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
 # check network
+checkReqArgs({{required}})
 # get url
 # get respones
 # convert response to table
