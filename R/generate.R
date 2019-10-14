@@ -26,7 +26,9 @@ base::dir.create(path = dir_r)
 fileNames <- base::setdiff(x = base::list.files("inst/templates/"),
                            y = base::list.files("inst/templates/")[grepl(pattern = "*.mst",
                                                                          x = base::list.files("inst/templates/"))])
-base::file.copy(from = paste0("inst/templates/", fileNames), to = paste0(dir_r, fileNames), overwrite = TRUE)
+base::file.copy(from = paste0("inst/templates/", fileNames),
+                to = paste0(dir_r, fileNames),
+                overwrite = TRUE)
 
 ### Descriptionlib
 ### function to retrieve all call names
@@ -99,10 +101,10 @@ aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string =
 
 ### function to generate @param section in the documentation
 aCallParamVector <- function(aCall) {
-  n <- length(aCall$parameters)
+  n <- length(aCall[["parameters"]])
   res <- character(n)
   for (i in 1:n) {
-    p <- aCall$parameters[[i]]
+    p <- aCall[["parameters"]][[i]]
     if ("deprecated" %in% names(p)) {
       res[i] <- paste0(p[["name"]], "; ",
                        p[["description"]])
@@ -114,8 +116,8 @@ aCallParamVector <- function(aCall) {
                                      "integer",
                                      "character")),
                        "; required: ",
-                       p$required, "; ",
-                       p$description)
+                       p[["required"]], "; ",
+                       p[["description"]])
     }
   }
   return(res)
@@ -208,6 +210,7 @@ aCallData <- list(name = aCall[["name"]],
                   arguments = aCallArgs,
                   required = aCall[["required"]],
                   verb = aCall[["verb"]],
+                  call = aCall[["call"]],
                   version = brapiSpecs[["info"]][["version"]],
                   tag = aCall[["tags"]])
 
