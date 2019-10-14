@@ -91,7 +91,7 @@ getCall <- function(brapiSpecs, idName) {
 ### * commoncropnames
 ### * markers
 ### * germplasm_germplasmDbId_attributes
-aCall <- getCall(brapiSpecs = brapiSpecs, idName = "search_observationtables_searchResultsDbId")
+aCall <- getCall(brapiSpecs = brapiSpecs, idName = "calls")
 ### Create aCallDesc object containing call description
 aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
                                                            pattern =  c("\\n\\n\\n"),
@@ -183,10 +183,10 @@ aCallReqArgs <- function(aCall) {
                   replacement = "",
                   x = required)
   if (length(required) == 0) {
-    aCall$required <- ""
+    aCall[["required"]] <- ""
     return(aCall)
   } else {
-    aCall$required <- required
+    aCall[["required"]] <- required
     return(aCall)
   }
 }
@@ -197,7 +197,7 @@ aCall <- aCallReqArgs(aCall = aCall)
 ### Store call family information for documentation
 aCallFamily <- c(
   paste0("brapi_", brapiSpecs[["info"]][["version"]]),
-  aCall$tags
+  aCall[["tags"]]
 )
 aCallFamily <- whisker::iteratelist(aCallFamily, value = "fname")
 
