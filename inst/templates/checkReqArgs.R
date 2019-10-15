@@ -1,4 +1,4 @@
-### Check required arguments
+### Check Required Arguments
 checkReqArgs <- function(...) {
   args <- list(...)
   non_empty <- function(s) {nchar(s) > 0}
