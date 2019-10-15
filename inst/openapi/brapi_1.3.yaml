@@ -258,6 +258,7 @@ paths:
         in: query
         description: DEPRECATED in v1.3 - see "markerProfileDbId" (camel case)
         required: false
+        deprecated: true
         style: form
         explode: true
         schema:
@@ -2930,6 +2931,7 @@ paths:
         in: query
         description: '**Deprecated** Use "attributeDbIds" instead'
         required: false
+        deprecated: true
         style: form
         explode: true
         schema:
@@ -5688,7 +5690,7 @@ paths:
           type: string
       - name: name
         in: query
-        description: DEPRECAED in v1.3 - see "markerName"
+        description: DEPRECATED in v1.3 - see "markerName"
         required: false
         deprecated: true
         style: form
@@ -5697,7 +5699,7 @@ paths:
           type: string
       - name: matchMethod
         in: query
-        description: DEPRECAED in v1.3 - see /search/markers
+        description: DEPRECATED in v1.3 - see /search/markers
         required: false
         deprecated: true
         style: form
@@ -5720,6 +5722,7 @@ paths:
         in: query
         description: DEPRECATED in v1.1 - see "includeSynonyms"
         required: false
+        deprecated: true
         style: form
         explode: true
         schema:
@@ -6486,7 +6489,7 @@ paths:
       - Observations
       - Deprecated
       summary: Deprecated List observation levels
-      description: " ** DEPRECTED ** Use /observationlevels\nCall to retrieve the\
+      description: " ** DEPRECATED ** Use /observationlevels\nCall to retrieve the\
         \ list of supported observation levels. Observation levels indicate the granularity\
         \ level at which the measurements are taken. The values are used to supply\
         \ the `observationLevel` parameter in the observation unit details call. "
@@ -14356,7 +14359,7 @@ paths:
       - Studies
       - Deprecated
       summary: Deprecated List study types
-      description: " ** DEPRECTED ** Use /studytypes\nCall to retrieve the list of\
+      description: " ** DEPRECATED ** Use /studytypes\nCall to retrieve the list of\
         \ study types.\nScope: PHENOTYPING. Implementation target date: PAG2016 "
       parameters:
       - name: page
@@ -16709,6 +16712,7 @@ components:
         linkageGroups:
           type: array
           description: '**Deprecated** Use "data"'
+          deprecated: true
           items:
             $ref: '#/components/schemas/linkageGroup'
         mapDbId:
@@ -17291,6 +17295,7 @@ components:
           type: string
           description: '** Deprecated ** use /studies/{studyDbId/layout for positional
             germplasm relationships'
+          deprecated: true
         genus:
           type: string
           description: Genus name for taxon. Initial uppercase letter required. (MCPD)
@@ -17364,10 +17369,12 @@ components:
           description: |-
             ** Deprecated ** The request contains the studyDbId
             The ID which uniquely identifies a study within the given database server
+          deprecated: true
         trialName:
           type: string
           description: "** Deprecated ** trialName not relevent \nThe human readable\
             \ name of a trial"
+          deprecated: true
     image:
       type: object
       properties:
@@ -17574,6 +17581,7 @@ components:
         abreviation:
           type: string
           description: 'Deprecated  Use abbreviation '
+          deprecated: true
         additionalInfo:
           type: object
           additionalProperties:
@@ -17599,6 +17607,7 @@ components:
         instituteAdress:
           type: string
           description: 'Deprecated  Use instituteAddress '
+          deprecated: true
         instituteName:
           type: string
           description: each institute/laboratory can have several experimental field
@@ -17687,6 +17696,7 @@ components:
         markerprofileDbId:
           type: string
           description: DEPRECATED in v1.3 - see "markerProfileDbId" (camel case)
+          deprecated: true
         uniqueDisplayName:
           type: string
           description: Human readable display name for this marker profile
@@ -17712,6 +17722,7 @@ components:
         markerprofileDbId:
           type: string
           description: DEPRECATED in v1.3 - see "markerProfileDbId" (camel case)
+          deprecated: true
         resultCount:
           type: integer
           description: Number of markers present in the marker profile
@@ -19111,6 +19122,7 @@ components:
         parent1Id:
           type: string
           description: '**Deprecated** use parent1DbId'
+          deprecated: true
         parent1Name:
           type: string
           description: the human readable name of the first parent of this germplasm
@@ -19129,6 +19141,7 @@ components:
         parent2Id:
           type: string
           description: '**Deprecated** use parent2DbId'
+          deprecated: true
         parent2Name:
           type: string
           description: The human readable name of the second parent of this germplasm
@@ -19578,6 +19591,7 @@ components:
         code:
           type: string
           description: DEPRECATED in v1.3 - see Error Handling best practice documentation
+          deprecated: true
         message:
           type: string
           description: A short message concerning the status of this request/response
@@ -21942,6 +21956,7 @@ components:
         sampleId:
           type: string
           description: '** Deprecated ** use sampleDbId'
+          deprecated: true
       description: List of sample references which have been created or updated
     ontologyReference_documentationLinks:
       type: object
