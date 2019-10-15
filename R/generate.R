@@ -91,6 +91,7 @@ getCall <- function(brapiSpecs, idName) {
 ### * commoncropnames
 ### * markers
 ### * germplasm_germplasmDbId_attributes
+### * search_observationtables_searchResultsDbId
 aCall <- getCall(brapiSpecs = brapiSpecs, idName = "calls")
 ### Create aCallDesc object containing call description
 aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
@@ -102,22 +103,60 @@ aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string =
 ### function to generate @param section in the documentation
 aCallParamVector <- function(aCall) {
   n <- length(aCall[["parameters"]])
-  res <- character(n)
+  res <- character(0)
   for (i in 1:n) {
     p <- aCall[["parameters"]][[i]]
-    if ("deprecated" %in% names(p)) {
-      res[i] <- paste0(p[["name"]], "; ",
-                       p[["description"]])
+    if (p[["name"]] == "Authorization" | "deprecated" %in% names(p)) {
+      next()
     } else {
-      res[i] <- paste0(p$name, " ",
-                       ifelse(("items" %in% names(p[["schema"]])),
-                              "vector of type character",
-                              ifelse(p[["schema"]][["type"]] == "integer",
-                                     "integer",
-                                     "character")),
-                       "; required: ",
-                       p[["required"]], "; ",
-                       p[["description"]])
+      if (p[["name"]] %in% c("Accept", "active", "dataType", "listType","sortOrder")) {
+        switch(p[["name"]],
+               "Accept" = {res <- c(res, paste0(p[["name"]], " ",
+                                                "character",
+                                                "; required: ",
+                                                p[["required"]], "; ",
+                                                p[["description"]], "; ",
+                                                'default: "",',
+                                                ' other possible values: "application/json"|"text/csv"|"text/tsv"|"application/flapjack"'))},
+               "active" = {res <- c(res, paste0(p[["name"]], " ",
+                                                "logical",
+                                                "; required: ",
+                                                p[["required"]], "; ",
+                                                p[["description"]], "; ",
+                                                'default: NA,',
+                                                ' other possible values: TRUE | FALSE"'))},
+               "dataType" = {res <- c(res, paste0(p[["name"]], " ",
+                                                  "character",
+                                                  "; required: ",
+                                                  p[["required"]], "; ",
+                                                  p[["description"]], "; ",
+                                                  'default: "",',
+                                                  ' other possible values: "application/json"|"text/csv"|"text/tsv"|"application/flapjack"'))},
+               "listType" = {res <- c(res, paste0(p[["name"]], " ",
+                                                  "character",
+                                                  "; required: ",
+                                                  p[["required"]], "; ",
+                                                  p[["description"]], "; ",
+                                                  'default: "",',
+                                                  ' other possible values: "germplasm"|"markers"|"observations"|"observationUnits"|"observationVariables"|"programs"|"samples"|"studies"|"trials"'))},
+               "sortOrder" = {res <- c(res, paste0(p[["name"]], " ",
+                                                   "character",
+                                                   "; required: ",
+                                                   p[["required"]], "; ",
+                                                   p[["description"]], "; ",
+                                                   'default: "",',
+                                                   ' other possible values: "asc"|"ASC"|"desc"|"DESC"'))})
+      } else {
+        res <- c(res, paste0(p[["name"]], " ",
+                             ifelse(("items" %in% names(p[["schema"]])),
+                                    "vector of type character",
+                                    ifelse(p[["schema"]][["type"]] == "integer",
+                                           "integer",
+                                           "character")),
+                             "; required: ",
+                             p[["required"]], "; ",
+                             p[["description"]]))
+      }
     }
   }
   return(res)
@@ -140,19 +179,52 @@ aCallParamString <- function(aCall) {
   n <- length(aCall[["parameters"]])
   res <- character(0)
   for (i in 1:n) {
-    if (aCall[["parameters"]][[i]][["name"]] == "Authorization" | "deprecated" %in% names(aCall[["parameters"]][[i]])) {
+    p <- aCall[["parameters"]][[i]]
+    if (p[["name"]] == "Authorization" | "deprecated" %in% names(p)) {
       next()
     } else {
-      if (aCall[["parameters"]][[i]][["name"]] == "page" | aCall[["parameters"]][[i]][["name"]] == "pageSize") {
+      if (p[["name"]] == "page" | p[["name"]] == "pageSize") {
         res <- paste(res,
-                     paste(aCall[["parameters"]][[i]][["name"]],
+                     paste(p[["name"]],
                            "=",
-                           as.integer(aCall[["parameters"]][[i]][["example"]])),
+                           as.integer(p[["example"]])),
                      sep = ", ")
       } else {
-        res <- paste(res,
-                     paste(aCall[["parameters"]][[i]][["name"]], "=", "''"),
-                     sep = ", ")
+        if (p[["name"]] %in% c("Accept",
+                               "active",
+                               "dataType",
+                               "listType",
+                               "sortOrder")) {
+          switch(p[["name"]],
+                 "Accept" = {res <- paste(res,
+                                          paste(p[["name"]],
+                                                "=",
+                                                "c('', 'application/json', 'text/csv', 'text/tsv', 'application/flapjack')"),
+                                          sep = ", ")},
+                 "active" = {res <- paste(res,
+                                          paste(p[["name"]], "=", "c(NA, TRUE, FALSE)"),
+                                          sep = ", ")},
+                 "dataType" = {res <- paste(res,
+                                            paste(p[["name"]],
+                                                  "=",
+                                                  "c('', 'application/json', 'text/csv', 'text/tsv', 'application/flapjack')"),
+                                            sep = ", ")},
+                 "listType" = {res <- paste(res,
+                                            paste(p[["name"]],
+                                                  "=",
+                                                  "c('', 'germplasm', 'markers', 'observations', 'observationUnits', 'observationVariables', 'programs', 'samples', 'studies', 'trials')"),
+                                            sep = ", ")},
+                 "sortOrder" = {res <- paste(res,
+                                             paste(p[["name"]],
+                                                   "=",
+                                                   "c('', 'asc', 'ASC', 'desc', 'DESC')"),
+                                             sep = ", ")})
+        } else {
+          res <- paste(res,
+                       paste(p[["name"]], "=", "''"),
+                       sep = ", ")
+        }
+
       }
     }
   }
