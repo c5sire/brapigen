@@ -109,7 +109,11 @@ aCallParamVector <- function(aCall) {
     if (p[["name"]] == "Authorization" | "deprecated" %in% names(p)) {
       next()
     } else {
-      if (p[["name"]] %in% c("Accept", "active", "dataType", "listType","sortOrder")) {
+      if (p[["name"]] %in% c("Accept",
+                             "active",
+                             "dataType",
+                             "listType",
+                             "sortOrder")) {
         switch(p[["name"]],
                "Accept" = {res <- c(res, paste0(p[["name"]], " ",
                                                 "character",
