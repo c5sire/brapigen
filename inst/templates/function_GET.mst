@@ -25,7 +25,7 @@
 #' @export
 brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
 # check network
-checkReqArgs({{required}})
+brapi_checkReqArgs({{required}})
 # get url
 # get respones
 # convert response to table
