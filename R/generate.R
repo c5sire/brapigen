@@ -299,4 +299,4 @@ template <- readLines(con = "inst/templates/function_GET.mst")
 
 writeLines(text = whisker::whisker.render(template = template,
                                           data = aCallData),
-           con = paste0(dir_r, "/", functionName, ".R"))
+           con = paste0(dir_r, functionName, ".R"))
