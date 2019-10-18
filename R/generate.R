@@ -1,12 +1,16 @@
+### Packages to be added to DESCRIPTION of brapigen
+### usethis::use_package(package = "yaml")
+### usethis::use_package(package = "magrittr")
+### usethis::use_package(package = "whisker")
+### usethis::use_package(package = "stringr")
+
 ### brapigen package needs to be build!
 ### Changed to version 1.3
 brapiSpecs <- yaml::read_yaml(system.file("openapi/brapi_1.3.yaml",
                                      package = "brapigen"))
 
-### Packages to be added to DESCRIPTION
-### usethis::use_package(package = "magrittr")
-### usethis::use_package(package = "whisker")
-### usethis::use_package(package = "stringr")
+### Packages to be added to DESCRIPTION of Brapir
+### usethis::use_package(package = "curl")
 
 ### load required packages
 library(magrittr)
@@ -26,9 +30,9 @@ base::dir.create(path = dir_r)
 fileNames <- base::setdiff(x = base::list.files("inst/templates/"),
                            y = base::list.files("inst/templates/")[grepl(pattern = "*.mst",
                                                                          x = base::list.files("inst/templates/"))])
-base::file.copy(from = paste0("inst/templates/", fileNames),
-                to = paste0(dir_r, fileNames),
-                overwrite = TRUE)
+invisible(base::file.copy(from = paste0("inst/templates/", fileNames),
+                          to = paste0(dir_r, fileNames),
+                          overwrite = TRUE))
 
 ### Descriptionlib
 ### function to retrieve all call names
@@ -92,7 +96,9 @@ getCall <- function(brapiSpecs, idName) {
 ### * markers
 ### * germplasm_germplasmDbId_attributes
 ### * search_observationtables_searchResultsDbId
-aCall <- getCall(brapiSpecs = brapiSpecs, idName = "calls")
+### * studies_studyDbId_layouts
+### * maps_mapDbId_positions_linkageGroupName # has two required arguments
+aCall <- getCall(brapiSpecs = brapiSpecs, idName = "maps_mapDbId_positions_linkageGroupName")
 ### Create aCallDesc object containing call description
 aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
                                                            pattern =  c("\\n\\n\\n"),
@@ -174,9 +180,7 @@ aCallParam <- lapply(X = aCallParam,
                        lapply(X = el, FUN = function(elel) {
                          stringr::str_replace_all(string = elel,
                                                   pattern = "\\n\\n",
-                                                  replacement = "\n#' ")
-                       })
-                     })
+                                                  replacement = "\n#' ")})})
 
 ### Create function for function arguments
 aCallParamString <- function(aCall) {
