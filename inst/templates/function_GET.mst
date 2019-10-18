@@ -14,6 +14,7 @@
 #' @return data.frame
 #'
 #' @author brapir generator package
+#'
 #' @references \href{https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/{{version}}#/{{tag}}/{{verb}}_{{name}} }{SwaggerHub}
 #'
 {{#family}}
@@ -24,9 +25,13 @@
 #'
 #' @export
 brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
-# check network
+brapi_checkCon(con = con, verbose = FALSE)
 brapi_checkReqArgs({{required}})
-# get url
+usedArgs <- as.list(match.call())
+# check other arguments for validity
+brapi_checkArgs(reqArgs = "{{required}}", usedArgs)
+# get callurl (finished!)
+callurl <- brapi_callURL(con = con, callPath = "{{call}}", reqArgs = "{{required}}", callVersion = {{version}}, usedArgs)
 # get respones
 # convert response to table
 # show metadata
