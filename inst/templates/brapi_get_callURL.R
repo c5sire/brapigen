@@ -1,5 +1,6 @@
-brapi_callURL <- function(con = NULL, callPath, reqArgs, callVersion, usedArgs) {
+brapi_get_callURL <- function(usedArgs, callPath, reqArgs, callVersion) {
   ## Check for Brapi connection object
+  con <- usedArgs[["con"]]
   if (is.null(con)) {return(NULL)}
   ## Preprocess required and used arguments, respectively reqArgs and usedArgs
   usedArgs <- usedArgs[2:length(usedArgs)]
