@@ -291,6 +291,7 @@ aCallData <- list(name = aCall[["name"]],
                   required = aCall[["required"]],
                   verb = aCall[["verb"]],
                   call = aCall[["call"]],
+                  package = brapiSpecs[["info"]][["title"]],
                   version = brapiSpecs[["info"]][["version"]],
                   tag = aCall[["tags"]])
 
