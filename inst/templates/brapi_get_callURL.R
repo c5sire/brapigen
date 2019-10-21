@@ -15,9 +15,9 @@ brapi_get_callURL <- function(usedArgs, callPath, reqArgs, packageName, callVers
   if (!is.null(con[["apipath"]])) {
     con[["apipath"]] <- paste0("/", con[["apipath"]])
   }
-  ## Add Brapi vesion
+  ## Add Brapi vesion (now /brapi/v1, in future e.g. /BrAPI-Core/2.0)
   version <- paste0("v", as.character(floor(callVersion)))
-  brapiVersion <- paste0("/brapi/", version)
+  brapiVersion <- paste0("/", tolower(packageName), "/", version)
   ## Correction for multicrop databases when call does not require {crop}
   if (callPath == "/commoncropnames" | callPath == "/calls") {
     con[["multicrop"]] <- FALSE
