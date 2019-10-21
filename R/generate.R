@@ -276,7 +276,7 @@ aCall <- aCallReqArgs(aCall = aCall)
 
 ### Store call family information for documentation
 aCallFamily <- c(
-  paste0("brapi_", brapiSpecs[["info"]][["version"]]),
+  paste0(tolower(brapiSpecs[["info"]][["title"]]), "_", brapiSpecs[["info"]][["version"]]),
   aCall[["tags"]]
 )
 aCallFamily <- whisker::iteratelist(aCallFamily, value = "fname")
