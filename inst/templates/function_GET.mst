@@ -28,6 +28,7 @@ brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
 brapi_checkCon(con = con, verbose = FALSE)
 brapi_checkReqArgs({{required}})
 usedArgs <- as.list(match.call())
+usedArgs[["con"]] <- con
 # check other arguments for validity
 brapi_checkArgs(reqArgs = "{{required}}", usedArgs)
 # get callurl (finished!)
