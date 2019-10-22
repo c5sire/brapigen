@@ -32,7 +32,7 @@ usedArgs[["con"]] <- con
 # check other arguments for validity
 brapi_checkArgs(reqArgs = "{{required}}", usedArgs)
 # get callurl (finished!)
-callurl <- brapi_get_callURL(usedArgs = usedArgs, callPath = "{{call}}", reqArgs = "{{required}}", packageName = tolower("{{package}}"), callVersion = {{version}})
+callurl <- brapi_GET_callURL(usedArgs = usedArgs, callPath = "{{call}}", reqArgs = "{{required}}", packageName = tolower("{{package}}"), callVersion = {{version}})
 # get respones
 # convert response to table
 # show metadata
