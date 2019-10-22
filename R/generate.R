@@ -4,6 +4,12 @@
 ### usethis::use_package(package = "whisker")
 ### usethis::use_package(package = "stringr")
 
+### 105 Total calls
+### --- +
+###  72 GET calls
+###  22 POST calls
+###  11 PUT calls
+
 ### brapigen package needs to be build!
 ### Changed to version 1.3
 brapiSpecs <- yaml::read_yaml(system.file("openapi/brapi_1.3.yaml",
@@ -97,8 +103,9 @@ getCall <- function(brapiSpecs, idName) {
 ### * germplasm_germplasmDbId_attributes
 ### * search_observationtables_searchResultsDbId
 ### * studies_studyDbId_layouts
+### * studies_studyDbId_observations
 ### * maps_mapDbId_positions_linkageGroupName # has two required arguments
-aCall <- getCall(brapiSpecs = brapiSpecs, idName = "maps_mapDbId_positions_linkageGroupName")
+aCall <- getCall(brapiSpecs = brapiSpecs, idName = "studies_studyDbId_observations")
 ### Create aCallDesc object containing call description
 aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
                                                            pattern =  c("\\n\\n\\n"),
