@@ -11,8 +11,38 @@ library(whisker)
 ### Functions
 ### ----
 ### Function to retrieve all call names
-fetchCallNames <- function(brapiSpecs) {
-  brapiSpecs[["paths"]] %>% names
+fetchCallNames <- function(brapiSpecs, verb = c("", "DELETE", "GET", "PATCH", "POST", "PUT")) {
+  verb <- tolower(match.arg(verb))
+  if (verb == "") {
+    callNames <- brapiSpecs[["paths"]] %>% names
+    callNames <- sub(pattern = "_",
+                     replacement = "",
+                     x = stringr::str_replace_all(
+                       string = stringr::str_replace_all(string = callNames,
+                                                         pattern = "/",
+                                                         replacement = "_"),
+                       pattern = stringr::regex("\\{|\\}"),
+                       replacement = ""))
+    return(callNames)
+  } else {
+    callNames <- as.character()
+    for (i in names(brapiSpecs[["paths"]])) {
+      if (verb %in% names(brapiSpecs[["paths"]][[i]])
+          &&
+          !("deprecated" %in% names(brapiSpecs[["paths"]][[i]][[verb]]))) {
+        callNames <- c(callNames, i)
+      }
+    }
+    callNames <- sub(pattern = "_",
+                     replacement = "",
+                     x = stringr::str_replace_all(
+                       string = stringr::str_replace_all(string = callNames,
+                                                         pattern = "/",
+                                                         replacement = "_"),
+                       pattern = stringr::regex("\\{|\\}"),
+                       replacement = ""))
+    return(callNames)
+  }
 }
 
 ### Function to retrieve call specifications for a GET call
@@ -226,22 +256,21 @@ invisible(base::file.copy(from = paste0("inst/templates/", fileNames),
                           to = paste0(dir_r, fileNames),
                           overwrite = TRUE))
 
-### retrieve all call names in a readable format
+### Retrieve call names in a readable format
 ###
 ### 105 Total calls
 ### --- +
+###   0 DELETE calls
 ###  72 GET calls
+###   0 PATCH calls
 ###  22 POST calls
 ###  11 PUT calls
 allCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
-allCallNames <- sub(pattern = "_",
-                    replacement = "",
-                    x = stringr::str_replace_all(
-                      string = stringr::str_replace_all(string = allCallNames,
-                                                        pattern = "/",
-                                                        replacement = "_"),
-                      pattern = stringr::regex("\\{|\\}"),
-                      replacement = ""))
+DELETEcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "DELETE")
+GETcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "GET")
+PATCHcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "PATCH")
+POSTcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "POST")
+PUTcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "PUT")
 
 ### Create aCall object containing call elements
 ### tested on:
@@ -253,7 +282,7 @@ allCallNames <- sub(pattern = "_",
 ### * studies_studyDbId_layouts
 ### * studies_studyDbId_observations
 ### * maps_mapDbId_positions_linkageGroupName # has two required arguments
-aCall <- getCall(brapiSpecs = brapiSpecs, idName = "maps_mapDbId_positions_linkageGroupName")
+aCall <- getCall(brapiSpecs = brapiSpecs, idName = "calls")
 ### Create aCallDesc object containing call description
 aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
                                                            pattern =  c("\\n\\n\\n"),
