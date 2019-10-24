@@ -1,34 +1,39 @@
 brapi_GET_callURL <- function(usedArgs, callPath, reqArgs, packageName, callVersion) {
-  ## Check for Brapi connection object
-  con <- usedArgs[["con"]]
-  if (is.null(con)) {return(NULL)}
-  ## Preprocess required and used arguments, respectively reqArgs and usedArgs
-  usedArgs <- usedArgs[2:length(usedArgs)]
+  if (is.null(usedArgs[["con"]])) {return(NULL)}
+  ## Preprocess required arguments
   if (grepl(pattern = ", ", x = reqArgs)) {
     reqArgs <- strsplit(x = reqArgs, split = ", ")[[1]]
   }
   ## Check for correct protocol
-  if (con[["secure"]]) {con[["protocol"]] <- "https://"}
+  if (usedArgs[["con"]][["secure"]]) {usedArgs[["con"]][["protocol"]] <- "https://"}
   ## Assign port
-  port <- ifelse(con[["port"]] == 80, "", paste0(":", con[["port"]]))
+  port <- ifelse(usedArgs[["con"]][["port"]] == 80, "", paste0(":", usedArgs[["con"]][["port"]]))
   ## Add apipath when not  NULL
-  if (!is.null(con[["apipath"]])) {
-    con[["apipath"]] <- paste0("/", con[["apipath"]])
+  if (!is.null(usedArgs[["con"]][["apipath"]])) {
+    usedArgs[["con"]][["apipath"]] <- paste0("/", usedArgs[["con"]][["apipath"]])
   }
   ## Add Brapi vesion (now /brapi/v1, in future e.g. /BrAPI-Core/2.0)
-  version <- paste0("v", as.character(floor(callVersion)))
-  brapiVersion <- paste0("/", tolower(packageName), "/", version)
+  version <- paste0("v", as.character(floor(callVersion))) # yields v1 or v2
+  brapiVersion <- paste0("/",
+                         tolower(strsplit(x = packageName,
+                                          split = "-")[[1]][1]), # yields brapi
+                         "/",
+                         version)
   ## Correction for multicrop databases when call does not require {crop}
-  if (callPath == "/commoncropnames" | callPath == "/calls") {
-    con[["multicrop"]] <- FALSE
+  if (callPath == "/commoncropnames" || callPath == "/calls") {
+    usedArgs[["con"]][["multicrop"]] <- FALSE
   }
   ## Create pointbase callurl: http(s)://db:port/{apipath}/{crop}/brapi/v?
-  if (con[["multicrop"]]) {
-    callurl <- paste0(con[["protocol"]], con[["db"]], port, con[["apipath"]],
-                        "/", con[["crop"]], brapiVersion)
+  if (usedArgs[["con"]][["multicrop"]]) {
+    callurl <- paste0(usedArgs[["con"]][["protocol"]],
+                      usedArgs[["con"]][["db"]],
+                      port, usedArgs[["con"]][["apipath"]],
+                        "/", usedArgs[["con"]][["crop"]], brapiVersion)
   } else {
-    callurl <- paste0(con[["protocol"]], con[["db"]], port, con[["apipath"]],
-                        brapiVersion)
+    callurl <- paste0(usedArgs[["con"]][["protocol"]],
+                      usedArgs[["con"]][["db"]],
+                      port, usedArgs[["con"]][["apipath"]],
+                      brapiVersion)
   }
   ## Extend pointbase callurl with call path to create call url
   pathVector <- strsplit(callPath, split = "\\{|\\}")[[1]]
@@ -48,10 +53,10 @@ brapi_GET_callURL <- function(usedArgs, callPath, reqArgs, packageName, callVers
     queryNames <- names(queryArgs)
     forbidden <- "[/?&]$"
     ### Add query parameters to call url
-    if (all(c("pageSize", "page") %in% names(queryArgs))) {
+    if (all(c("pageSize", "page") %in% queryNames)) {
       brapi_checkPagingArgs(queryArgs[["pageSize"]], queryArgs[["page"]])
     } # perhaps put this in argument checking
-    if ("pageSize" %in% names(queryArgs)) {
+    if ("pageSize" %in% queryNames) {
       queryArgs[["pageSize"]] <- ifelse(queryArgs[["pageSize"]] == 1000,
                                         "",
                                         queryArgs[["pageSize"]])
