@@ -1,4 +1,4 @@
-### Internal function to check required arguments
+### Internal function to check required arguments are filled
 brapi_checkReqArgs <- function(...) {
   args <- list(...)
   non_empty <- function(s) {nchar(s) > 0}
