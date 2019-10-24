@@ -25,13 +25,13 @@ brapi_checkCon <- function(con = NULL, verbose = TRUE, brapi_calls = "any") {
   base::stopifnot(is.logical(verbose))
   base::stopifnot(is.character(brapi_calls))
 
-  url <- con$db
+  url <- con[["db"]]
 
   brapi_canInternet()
-  brapi_canInternet(url)
+  brapi_canInternet(url = url)
 
   if (verbose) {
-    brapi_message("BrAPI connection ok.")
+    brapi_message(msg = "BrAPI connection ok.")
     brapi_message(paste(con, collapse = "\n"))
   }
   return(TRUE)
