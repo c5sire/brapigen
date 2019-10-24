@@ -4,69 +4,18 @@
 ### usethis::use_package(package = "whisker")
 ### usethis::use_package(package = "stringr")
 
-### 105 Total calls
-### --- +
-###  72 GET calls
-###  22 POST calls
-###  11 PUT calls
-
-### brapigen package needs to be build!
-### Changed to version 1.3
-brapiSpecs <- yaml::read_yaml(system.file("openapi/brapi_1.3.yaml",
-                                     package = "brapigen"))
-
-### Packages to be added to DESCRIPTION of Brapir
-### usethis::use_package(package = "curl")
-
 ### load required packages
 library(magrittr)
 library(whisker)
 
-### create directory infrastructure
-dir_b <- "../brapir"
-
-base::unlink(x = dir_b, recursive = TRUE, force = TRUE)
-base::list.files(path = dir_b, recursive = TRUE)
-
-base::dir.create(path = dir_b)
-dir_r <- base::file.path(dir_b, "R/")
-base::dir.create(path = dir_r)
-
-### copy files
-fileNames <- base::setdiff(x = base::list.files("inst/templates/"),
-                           y = base::list.files("inst/templates/")[grepl(pattern = "*.mst",
-                                                                         x = base::list.files("inst/templates/"))])
-invisible(base::file.copy(from = paste0("inst/templates/", fileNames),
-                          to = paste0(dir_r, fileNames),
-                          overwrite = TRUE))
-
-### Descriptionlib
-### function to retrieve all call names
+### Functions
+### ----
+### Function to retrieve all call names
 fetchCallNames <- function(brapiSpecs) {
   brapiSpecs[["paths"]] %>% names
 }
 
-### retrieve all call names in a readable format
-allCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
-allCallNames <- sub(pattern = "_",
-                    replacement = "",
-                    x = stringr::str_replace_all(
-                      string = stringr::str_replace_all(string = allCallNames,
-                                                        pattern = "/",
-                                                        replacement = "_"),
-                      pattern = stringr::regex("\\{|\\}"),
-                      replacement = ""))
-
-### only during development TO BE DELETED LATER
-rm(list = setdiff(objects(),
-                  c("brapiSpecs",
-                    "allCallNames",
-                    "dir_b",
-                    "dir_r",
-                    "fileNames",
-                    "fetchCallNames")))
-
-### function to retrieve call specifications for a GET call
+### Function to retrieve call specifications for a GET call
 ### intended to loop over allCallNames, where each element of the vector will be
 ### used as idName
 getCall <- function(brapiSpecs, idName) {
@@ -95,25 +44,7 @@ getCall <- function(brapiSpecs, idName) {
   }
 }
 
-### Create aCall object containing call elements
-### tested on:
-### * calls
-### * commoncropnames
-### * markers
-### * germplasm_germplasmDbId_attributes
-### * search_observationtables_searchResultsDbId
-### * studies_studyDbId_layouts
-### * studies_studyDbId_observations
-### * maps_mapDbId_positions_linkageGroupName # has two required arguments
-aCall <- getCall(brapiSpecs = brapiSpecs, idName = "studies_studyDbId_observations")
-### Create aCallDesc object containing call description
-aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
-                                                           pattern =  c("\\n\\n\\n"),
-                                                           replacement =  "\\\n\\\n"),
-                         pattern =  c("\\n\\n"),
-                         replacement =  "\n#' ")
-
-### function to generate @param section in the documentation
+### Function to generate @param section in the documentation
 aCallParamVector <- function(aCall) {
   n <- length(aCall[["parameters"]])
   res <- character(0)
@@ -179,17 +110,7 @@ aCallParamVector <- function(aCall) {
   return(res)
 }
 
-### Create @param description for documentation
-aCallParam <- aCallParamVector(aCall = aCall)
-aCallParam <- whisker::iteratelist(x = aCallParam, value = "pname")
-aCallParam <- lapply(X = aCallParam,
-                     FUN = function(el) {
-                       lapply(X = el, FUN = function(elel) {
-                         stringr::str_replace_all(string = elel,
-                                                  pattern = "\\n\\n",
-                                                  replacement = "\n#' ")})})
-
-### Create function for function arguments
+### Function to generate function call arguments
 aCallParamString <- function(aCall) {
   n <- length(aCall[["parameters"]])
   res <- character(0)
@@ -249,10 +170,7 @@ aCallParamString <- function(aCall) {
   return(res)
 }
 
-### Creation function arguments for selected call
-aCallArgs <- aCallParamString(aCall = aCall)
-
-### Create function to identify required arguments
+### Function to identify required arguments in a function call
 aCallReqArgs <- function(aCall) {
   n <- length(aCall[["parameters"]])
   required <- character(0)
@@ -277,6 +195,84 @@ aCallReqArgs <- function(aCall) {
     return(aCall)
   }
 }
+
+### ----
+
+### Create a GET function
+
+### brapigen package needs to be build!
+### Changed to version 1.3
+brapiSpecs <- yaml::read_yaml(system.file("openapi/brapi_1.3.yaml",
+                                     package = "brapigen"))
+
+### Packages to be added to DESCRIPTION of Brapir
+### usethis::use_package(package = "curl")
+
+### Create directory infrastructure
+dir_b <- "../brapir"
+
+base::unlink(x = dir_b, recursive = TRUE, force = TRUE)
+base::list.files(path = dir_b, recursive = TRUE)
+
+base::dir.create(path = dir_b)
+dir_r <- base::file.path(dir_b, "R/")
+base::dir.create(path = dir_r)
+
+### copy files
+fileNames <- base::setdiff(x = base::list.files("inst/templates/"),
+                           y = base::list.files("inst/templates/")[grepl(pattern = "*.mst",
+                                                                         x = base::list.files("inst/templates/"))])
+invisible(base::file.copy(from = paste0("inst/templates/", fileNames),
+                          to = paste0(dir_r, fileNames),
+                          overwrite = TRUE))
+
+### retrieve all call names in a readable format
+###
+### 105 Total calls
+### --- +
+###  72 GET calls
+###  22 POST calls
+###  11 PUT calls
+allCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
+allCallNames <- sub(pattern = "_",
+                    replacement = "",
+                    x = stringr::str_replace_all(
+                      string = stringr::str_replace_all(string = allCallNames,
+                                                        pattern = "/",
+                                                        replacement = "_"),
+                      pattern = stringr::regex("\\{|\\}"),
+                      replacement = ""))
+
+### Create aCall object containing call elements
+### tested on:
+### * calls
+### * commoncropnames
+### * markers
+### * germplasm_germplasmDbId_attributes
+### * search_observationtables_searchResultsDbId
+### * studies_studyDbId_layouts
+### * studies_studyDbId_observations
+### * maps_mapDbId_positions_linkageGroupName # has two required arguments
+aCall <- getCall(brapiSpecs = brapiSpecs, idName = "maps_mapDbId_positions_linkageGroupName")
+### Create aCallDesc object containing call description
+aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
+                                                           pattern =  c("\\n\\n\\n"),
+                                                           replacement =  "\\\n\\\n"),
+                         pattern =  c("\\n\\n"),
+                         replacement =  "\n#' ")
+
+### Create @param description for documentation
+aCallParam <- aCallParamVector(aCall = aCall)
+aCallParam <- whisker::iteratelist(x = aCallParam, value = "pname")
+aCallParam <- lapply(X = aCallParam,
+                     FUN = function(el) {
+                       lapply(X = el, FUN = function(elel) {
+                         stringr::str_replace_all(string = elel,
+                                                  pattern = "\\n\\n",
+                                                  replacement = "\n#' ")})})
+
+### Creation function arguments for selected call
+aCallArgs <- aCallParamString(aCall = aCall)
 
 ### Identify and store required arguments
 aCall <- aCallReqArgs(aCall = aCall)
@@ -304,13 +300,14 @@ aCallData <- list(name = aCall[["name"]],
                   version = brapiSpecs[["info"]][["version"]],
                   tag = aCall[["tags"]])
 
+### Load template for function name
 template <- readLines(con = "inst/templates/function_name.mst")
-
+### Create function name
 functionName <- whisker::whisker.render(template = template,
                                         data = aCallData)
-
+### Load template to create the GET function
 template <- readLines(con = "inst/templates/function_GET.mst")
-
+### Write the created GET function
 writeLines(text = whisker::whisker.render(template = template,
                                           data = aCallData),
            con = paste0(dir_r, functionName, ".R"))
