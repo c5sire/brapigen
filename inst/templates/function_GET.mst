@@ -25,26 +25,27 @@
 #'
 #' @export
 brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
-brapi_checkCon(con = con, verbose = FALSE)
-brapi_checkReqArgs({{required}})
-usedArgs <- as.list(match.call())
-usedArgs <- lapply(X = usedArgs, FUN = eval, envir = parent.frame(n = 1))
-usedArgs[[1]] <- NULL
-## check other arguments for validity
-#brapi_checkArgs(reqArgs = "{{required}}", usedArgs)
-## get callurl (finished!)
-callurl <- brapi_GET_callURL(usedArgs = usedArgs,
-                             callPath = "{{call}}",
-                             reqArgs = "{{required}}",
-                             packageName = "{{package}}",
-                             callVersion = {{version}})
-## get respones
-## convert response to table
-## show metadata
-## return result table
-out <- list()
-out[["callurl"]] <- callurl
-out[["usedArgs"]] <- usedArgs
-class(out) <- "brapi_{{verb}}_{{name}}"
-return(out)
+  ## Create a list of used arguments
+  usedArgs <- as.list(match.call())
+  usedArgs <- lapply(X = usedArgs, FUN = eval, envir = parent.frame(n = 1))
+  usedArgs[[1]] <- NULL
+  ## Check if BrAPI server can be reached given the connection details
+  brapi_checkCon(con = usedArgs[["con"]], verbose = FALSE)
+  ## Check validity of used and required arguments
+  brapi_checkArgs(usedArgs, reqArgs = "{{required}}")
+  ## Obtain the call url
+  callurl <- brapi_GET_callURL(usedArgs = usedArgs,
+                               callPath = "{{call}}",
+                               reqArgs = "{{required}}",
+                               packageName = "{{package}}",
+                               callVersion = {{version}})
+  ## get respones
+  ## convert response to table
+  ## show metadata
+  ## return result table
+  out <- list()
+  out[["callurl"]] <- callurl
+  out[["usedArgs"]] <- usedArgs
+  class(out) <- "brapi_{{verb}}_{{name}}"
+  return(out)
 }
