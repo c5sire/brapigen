@@ -53,9 +53,9 @@ brapi_GET_callURL <- function(usedArgs, callPath, reqArgs, packageName, callVers
     queryNames <- names(queryArgs)
     forbidden <- "[/?&]$"
     ### Add query parameters to call url
-    if (all(c("pageSize", "page") %in% queryNames)) {
-      brapi_checkPagingArgs(queryArgs[["pageSize"]], queryArgs[["page"]])
-    } # perhaps put this in argument checking
+    # if (all(c("pageSize", "page") %in% queryNames)) {
+    #   brapi_checkPagingArgs(queryArgs[["pageSize"]], queryArgs[["page"]])
+    # } # perhaps put this in argument checking
     if ("pageSize" %in% queryNames) {
       queryArgs[["pageSize"]] <- ifelse(queryArgs[["pageSize"]] == 1000,
                                         "",
