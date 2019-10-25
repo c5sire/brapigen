@@ -49,17 +49,9 @@ fetchCallNames <- function(brapiSpecs, verb = c("", "DELETE", "GET", "PATCH", "P
 ### intended to loop over allCallNames, where each element of the vector will be
 ### used as idName
 getCall <- function(brapiSpecs, idName) {
-  brapiCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
-  allCallNames <- sub(pattern = "_",
-                      replacement = "",
-                      x = stringr::str_replace_all(
-                        string = stringr::str_replace_all(string = brapiCallNames,
-                                                          pattern = "/",
-                                                          replacement = "_"),
-                        pattern = stringr::regex("\\{|\\}"),
-                        replacement = ""))
+  allCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
   idNumber <- which(allCallNames == idName)
-  callName <- brapiCallNames[idNumber]
+  callName <- names(brapiSpecs[["paths"]])[idNumber]
   ## Check for type of call and deprecation
   if ("get" %in% names(brapiSpecs[["paths"]][[callName]])) {
     if (!("Deprecated" %in% brapiSpecs[["paths"]][[callName]][["get"]][["tags"]])) {
@@ -282,7 +274,7 @@ PUTcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "PUT")
 ### * studies_studyDbId_layouts
 ### * studies_studyDbId_observations
 ### * maps_mapDbId_positions_linkageGroupName # has two required arguments
-aCall <- getCall(brapiSpecs = brapiSpecs, idName = "calls")
+aCall <- getCall(brapiSpecs = brapiSpecs, idName = "maps_mapDbId_positions_linkageGroupName")
 ### Create aCallDesc object containing call description
 aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
                                                            pattern =  c("\\n\\n\\n"),
