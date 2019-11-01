@@ -26,8 +26,10 @@
 #' @export
 brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
   ## Create a list of used arguments
-  usedArgs <- as.list(match.call())
-  usedArgs <- lapply(X = usedArgs, FUN = eval, envir = parent.frame(n = 1))
+  usedArgs <- lapply(X = as.list(match.call()),
+                     FUN = eval,
+                     envir = parent.frame(n = 1))
+  ## Remove function name from usedArgs list
   usedArgs[[1]] <- NULL
   ## Check if BrAPI server can be reached given the connection details
   brapi_checkCon(con = usedArgs[["con"]], verbose = FALSE)
