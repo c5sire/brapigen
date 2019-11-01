@@ -78,6 +78,9 @@ aCallParamVector <- function(aCall) {
       if (p[["name"]] %in% c("Accept",
                              "active",
                              "dataType",
+                             "expandHomozygotes",
+                             "includeSiblings",
+                             "includeSynonyms",
                              "listType",
                              "sortOrder")) {
         switch(p[["name"]],
@@ -102,6 +105,27 @@ aCallParamVector <- function(aCall) {
                                                   p[["description"]], "; ",
                                                   'default: "",',
                                                   ' other possible values: "application/json"|"text/csv"|"text/tsv"|"application/flapjack"'))},
+               "expandHomozygotes" = {res <- c(res, paste0(p[["name"]], " ",
+                                                           "logical",
+                                                           "; required: ",
+                                                           p[["required"]], "; ",
+                                                           p[["description"]], "; ",
+                                                           'default: NA,',
+                                                           ' other possible values: TRUE | FALSE"'))},
+               "includeSiblings" = {res <- c(res, paste0(p[["name"]], " ",
+                                                         "logical",
+                                                         "; required: ",
+                                                         p[["required"]], "; ",
+                                                         p[["description"]], "; ",
+                                                         'default: NA,',
+                                                         ' other possible values: TRUE | FALSE"'))},
+               "includeSynonyms" = {res <- c(res, paste0(p[["name"]], " ",
+                                                         "logical",
+                                                         "; required: ",
+                                                         p[["required"]], "; ",
+                                                         p[["description"]], "; ",
+                                                         'default: NA,',
+                                                         ' other possible values: TRUE | FALSE"'))},
                "listType" = {res <- c(res, paste0(p[["name"]], " ",
                                                   "character",
                                                   "; required: ",
@@ -147,42 +171,56 @@ aCallParamString <- function(aCall) {
                            "=",
                            as.integer(p[["example"]])),
                      sep = ", ")
+        next()
+      }
+      if (p[["name"]] == "min") {
+        res <- paste(res,
+                     paste(p[["name"]],
+                           "=",
+                           0),
+                     sep = ", ")
+        next()
+      }
+      if (p[["name"]] == "max") {
+        res <- paste(res,
+                     paste(p[["name"]],
+                           "=",
+                           0),
+                     sep = ", ")
+        next()
+      }
+      if (p[["name"]] %in% c("Accept",
+                             "active",
+                             "expandHomozygotes",
+                             "includeSiblings",
+                             "includeSynonyms")) {
+        switch(p[["name"]],
+               "Accept" = {res <- paste(res,
+                                        paste(p[["name"]],
+                                              "=",
+                                              "'application/json'"),
+                                        sep = ", ")
+               next()},
+               "active" = {res <- paste(res,
+                                        paste(p[["name"]], "=", "NA"),
+                                        sep = ", ")
+               next()},
+               "expandHomozygotes" = {res <- paste(res,
+                                                   paste(p[["name"]], "=", "NA"),
+                                                   sep = ", ")
+               next()},
+               "includeSiblings" = {res <- paste(res,
+                                                 paste(p[["name"]], "=", "NA"),
+                                                 sep = ", ")
+               next()},
+               "includeSynonyms" = {res <- paste(res,
+                                                 paste(p[["name"]], "=", "NA"),
+                                                 sep = ", ")
+               next()})
       } else {
-        if (p[["name"]] %in% c("Accept",
-                               "active",
-                               "dataType",
-                               "listType",
-                               "sortOrder")) {
-          switch(p[["name"]],
-                 "Accept" = {res <- paste(res,
-                                          paste(p[["name"]],
-                                                "=",
-                                                "c('application/json', 'text/csv', 'text/tsv', 'application/flapjack')"),
-                                          sep = ", ")},
-                 "active" = {res <- paste(res,
-                                          paste(p[["name"]], "=", "c(NA, TRUE, FALSE)"),
-                                          sep = ", ")},
-                 "dataType" = {res <- paste(res,
-                                            paste(p[["name"]],
-                                                  "=",
-                                                  "c('', 'application/json', 'text/csv', 'text/tsv', 'application/flapjack')"),
-                                            sep = ", ")},
-                 "listType" = {res <- paste(res,
-                                            paste(p[["name"]],
-                                                  "=",
-                                                  "c('', 'germplasm', 'markers', 'observations', 'observationUnits', 'observationVariables', 'programs', 'samples', 'studies', 'trials')"),
-                                            sep = ", ")},
-                 "sortOrder" = {res <- paste(res,
-                                             paste(p[["name"]],
-                                                   "=",
-                                                   "c('', 'asc', 'ASC', 'desc', 'DESC')"),
-                                             sep = ", ")})
-        } else {
-          res <- paste(res,
-                       paste(p[["name"]], "=", "''"),
-                       sep = ", ")
-        }
-
+        res <- paste(res,
+                     paste(p[["name"]], "=", "''"),
+                     sep = ", ")
       }
     }
   }
@@ -274,7 +312,7 @@ PUTcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "PUT")
 ### * studies_studyDbId_layouts
 ### * studies_studyDbId_observations
 ### * maps_mapDbId_positions_linkageGroupName # has two required arguments
-aCall <- getCall(brapiSpecs = brapiSpecs, idName = "maps_mapDbId_positions_linkageGroupName")
+aCall <- getCall(brapiSpecs = brapiSpecs, idName = "calls")
 ### Create aCallDesc object containing call description
 aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
                                                            pattern =  c("\\n\\n\\n"),
