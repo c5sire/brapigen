@@ -1,32 +1,145 @@
-### Internal function to check used and required arguments
+### Internal function to match and check used and required arguments
 brapi_checkArgs <- function(usedArgs, reqArgs) {
+  ## Remove con list (connection object) from used arguments
   usedArgs[["con"]] <- NULL
-  ## Check for the required Arguments
-  if (grepl(pattern = ", ", x = reqArgs)) {
-    reqArgs <- strsplit(x = reqArgs, split = ", ")[[1]]
-  }
-  reqArgs <- usedArgs[c(reqArgs)]
-  for (i in 1:length(reqArgs)) {
-    if (!is.character(reqArgs[[i]])) {
-      stop('Required argument: "', names(reqArgs[i]), '" should be of type character e.g. "text".')
-    }
-    if (!(nchar(reqArgs[[i]]) > 0)) {
-      stop("Required argument ", names(reqArgs[i]), " should at least have length one.")
-    }
-  }
-  ## Delete required arguments from used arguments
-  usedArgs[names(reqArgs)] <- NULL
-  ## CONTINUE HERE!!
 
-  if ("page" %in% names(usedArgs)) {
-    if (!is.numeric(usedArgs[["page"]])) {
-      stop('Argument: "page" should be of type integer.')
+  ## Argument matching for certain character strings with limited options
+  reqMatch <- c("Accept",
+                "dataType",
+                "format",
+                "listType",
+                "sortBy",
+                "sortOrder")
+  if (any(reqMatch %in% names(usedArgs))) {
+    reqMatch <- reqMatch[reqMatch %in% names(usedArgs)]
+    for (i in reqMatch) {
+      switch(i,
+             "Accept" = {
+               match.arg2(arg = usedArgs[[i]],
+                          choices =  c("application/json",
+                                       "text/csv",
+                                       "text/tsv",
+                                       "application/flapjack"))},
+             "dataType" = {
+               match.arg2(arg = usedArgs[[i]],
+                          choices =  c("",
+                                       "application/json",
+                                       "text/csv",
+                                       "text/tsv",
+                                       "application/flapjack"))},
+             "format" = {
+               match.arg2(arg = usedArgs[[i]],
+                          choices =  c("csv",
+                                       "tsv",
+                                       "flapjack"))},
+             "listType" = {
+               match.arg2(arg = usedArgs[[i]],
+                          choices =  c("",
+                                       "germplasm",
+                                       "markers",
+                                       "observations",
+                                       "observationUnits",
+                                       "observationVariables",
+                                       "programs",
+                                       "samples",
+                                       "studies",
+                                       "trials"))},
+             "sortBy" = {
+               match.arg2(arg = usedArgs[[i]],
+                          choices =  c("",
+                                       "endDate",
+                                       "locationDbId",
+                                       "programDbId",
+                                       "programName",
+                                       "seasonDbId",
+                                       "startDate",
+                                       "studyDbId",
+                                       "studyLocation",
+                                       "studyName",
+                                       "studyTypeDbId",
+                                       "trialDbId",
+                                       "trialName"))},
+             "sortOrder" = {
+               match.arg2(arg = usedArgs[[i]],
+                          choices =  c("",
+                                       "asc",
+                                       "ASC",
+                                       "desc",
+                                       "DESC"))})
     }
-    if (page < 0) {
-      stop('Argument: "page" should be >= 0 (0 is the default meaning page number 1).')
+    ## Delete matched arguments from used arguments except for "Accept"
+    if ("Accept" %in% reqMatch) {
+      usedArgs[reqMatch[!reqMatch ==  "Accept"]] <- NULL
+    } else {
+      usedArgs[reqMatch] <- NULL
     }
   }
-  if (all(c("pageSize", "page") %in% names(usedArgs))) {
-    brapi_checkPagingArgs(queryArgs[["pageSize"]], queryArgs[["page"]])
-  } # perhaps put this in argument checking
+
+  ## Check for the required arguments
+  if (reqArgs != "") {
+    ## Split when there is more than one required argument
+    if (grepl(pattern = ", ", x = reqArgs)) {
+      reqArgs <- strsplit(x = reqArgs, split = ", ")[[1]]
+    }
+    reqArgs <- usedArgs[c(reqArgs)]
+    for (i in names(reqArgs)) {
+      ## Check if required argument is of type character
+      if (!is.character(reqArgs[[i]])) {
+        stop('Required argument: "', i, '" should be of type character, e.g. ', i, ' = "text".')
+      }
+      ## Check if required argument has more than zero characters
+      if (!(nchar(reqArgs[[i]]) > 0)) {
+        stop('Required argument: "', i, '" should at least have length one.')
+      }
+      if (i == "Accept" && !(usedArgs[[i]] %in% c("application/json", "text/csv", "text/tsv", "application/flapjack"))) {
+        stop('Required argument: "', i, '" should be one of: "application/json"|"text/csv"|"text/tsv"|"application/flapjack".')
+      }
+    }
+    ## Delete required arguments from used arguments
+    usedArgs[names(reqArgs)] <- NULL
+  }
+
+  ## Check if there are still used arguments
+  if (length(usedArgs) > 0) {
+    ## Checking used arguments
+    for (i in names(usedArgs)) {
+      ## Check for arguments which are of type integer
+      if (i %in% c("page", "pageSize", "min", "max")) {
+        if (!is.numeric(usedArgs[[i]])) {
+          stop('Argument: "', i, '" should be of type integer.')
+        }
+        if (i == "page" && usedArgs[[i]] < 0) {
+          stop('Argument: "', i, '" should be >= 0 (0 is the default, meaning page number 1).')
+        }
+        if (i == "pageSize" && usedArgs[[i]] < 1) {
+          stop('Argument: "', i, '" should be > 0.')
+        }
+        if ((i == "min" | i == "max") && usedArgs[[i]] < 0) {
+          stop('Argument: "', i, '" should be >= 0.')
+        }
+        if (i == "page" | i == "pageSize") {
+          usedArgs[[i]] <- NULL
+        }
+        next()
+      }
+      ## Check for arguments which are of type logical
+      if (i %in% c("active", "expandHomozygotes", "includeSiblings", "includeSynonyms")) {
+        if (!is.logical(usedArgs[[i]])) {
+          stop('Argument: "', i, '" should be of type logical e.g. NA, TRUE or FALSE.')
+        }
+        usedArgs[[i]] <- NULL
+        next()
+      }
+      ## Check any other argument to be of type character
+      if (!is.character(usedArgs[[i]])) {
+        stop('Argument: "', i, '" should be of type character e.g. "text".')
+      }
+      usedArgs[[i]] <- NULL
+    }
+    ## Check when both min and max are present in used arguments that
+    ## min is smaller than or equal to max
+    if ((all(c("min", "max") %in% names(usedArgs))) && (!usedArgs[["min"]] <= usedArgs[["max"]])) {
+      stop('Argument: "min" can never be larger than argument: "max".')
+    }
+  }
 }
