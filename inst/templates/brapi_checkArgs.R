@@ -1,11 +1,34 @@
-### Internal function to match and check used and required arguments
+### Internal function to check required and used arguments
 brapi_checkArgs <- function(usedArgs, reqArgs) {
   ## Remove con list (connection object) from used arguments
   usedArgs[["con"]] <- NULL
 
+  ## Check for the required arguments
+  if (reqArgs != "") {
+    ## Split when there is more than one required argument
+    if (grepl(pattern = ", ", x = reqArgs)) {
+      reqArgs <- strsplit(x = reqArgs, split = ", ")[[1]]
+    }
+    reqArgs <- usedArgs[c(reqArgs)]
+    for (i in names(reqArgs)) {
+      ## Check if required argument is of type character
+      if (!is.character(reqArgs[[i]])) {
+        stop('Required argument: "', i, '" should be of type character, e.g. ', i, ' = "text".')
+      }
+      ## Check if required argument has more than zero characters
+      if (!(nchar(reqArgs[[i]]) > 0)) {
+        stop('Required argument: "', i, '" should at least have length one.')
+      }
+      if (i == "Accept" && !(usedArgs[[i]] %in% c("application/json", "text/csv", "text/tsv", "application/flapjack"))) {
+        stop('Required argument: "', i, '" should be one of: "application/json"|"text/csv"|"text/tsv"|"application/flapjack".')
+      }
+    }
+    ## Delete required arguments from used arguments
+    usedArgs[names(reqArgs)] <- NULL
+  }
+
   ## Argument matching for certain character strings with limited options
-  reqMatch <- c("Accept",
-                "dataType",
+  reqMatch <- c("dataType",
                 "format",
                 "listType",
                 "sortBy",
@@ -14,12 +37,6 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
     reqMatch <- reqMatch[reqMatch %in% names(usedArgs)]
     for (i in reqMatch) {
       switch(i,
-             "Accept" = {
-               match.arg2(arg = usedArgs[[i]],
-                          choices =  c("application/json",
-                                       "text/csv",
-                                       "text/tsv",
-                                       "application/flapjack"))},
              "dataType" = {
                match.arg2(arg = usedArgs[[i]],
                           choices =  c("",
@@ -67,36 +84,8 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
                                        "desc",
                                        "DESC"))})
     }
-    ## Delete matched arguments from used arguments except for "Accept"
-    if ("Accept" %in% reqMatch) {
-      usedArgs[reqMatch[!reqMatch ==  "Accept"]] <- NULL
-    } else {
-      usedArgs[reqMatch] <- NULL
-    }
-  }
-
-  ## Check for the required arguments
-  if (reqArgs != "") {
-    ## Split when there is more than one required argument
-    if (grepl(pattern = ", ", x = reqArgs)) {
-      reqArgs <- strsplit(x = reqArgs, split = ", ")[[1]]
-    }
-    reqArgs <- usedArgs[c(reqArgs)]
-    for (i in names(reqArgs)) {
-      ## Check if required argument is of type character
-      if (!is.character(reqArgs[[i]])) {
-        stop('Required argument: "', i, '" should be of type character, e.g. ', i, ' = "text".')
-      }
-      ## Check if required argument has more than zero characters
-      if (!(nchar(reqArgs[[i]]) > 0)) {
-        stop('Required argument: "', i, '" should at least have length one.')
-      }
-      if (i == "Accept" && !(usedArgs[[i]] %in% c("application/json", "text/csv", "text/tsv", "application/flapjack"))) {
-        stop('Required argument: "', i, '" should be one of: "application/json"|"text/csv"|"text/tsv"|"application/flapjack".')
-      }
-    }
-    ## Delete required arguments from used arguments
-    usedArgs[names(reqArgs)] <- NULL
+    ## Delete matched arguments from used arguments
+    usedArgs[reqMatch] <- NULL
   }
 
   ## Check if there are still used arguments
