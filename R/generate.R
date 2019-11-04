@@ -79,6 +79,7 @@ aCallParamVector <- function(aCall) {
                              "active",
                              "dataType",
                              "expandHomozygotes",
+                             "format",
                              "includeSiblings",
                              "includeSynonyms",
                              "listType",
@@ -112,6 +113,13 @@ aCallParamVector <- function(aCall) {
                                                            p[["description"]], "; ",
                                                            'default: NA,',
                                                            ' other possible values: TRUE | FALSE'))},
+               "format" = {res <- c(res, paste0(p[["name"]], " ",
+                                                "character",
+                                                "; required: ",
+                                                p[["required"]], "; ",
+                                                p[["description"]], "; ",
+                                                'default: "csv",',
+                                                ' other possible values: "tsv" and depending on the call "flapjack" may be supported.'))},
                "includeSiblings" = {res <- c(res, paste0(p[["name"]], " ",
                                                          "logical",
                                                          "; required: ",
@@ -170,6 +178,14 @@ aCallParamString <- function(aCall) {
                      paste(p[["name"]],
                            "=",
                            as.integer(p[["example"]])),
+                     sep = ", ")
+        next()
+      }
+      if (p[["name"]] == "format") {
+        res <- paste(res,
+                     paste(p[["name"]],
+                           "=",
+                           "'csv'"),
                      sep = ", ")
         next()
       }
