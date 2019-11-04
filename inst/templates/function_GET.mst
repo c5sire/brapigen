@@ -44,7 +44,7 @@ brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
   ## get respones
   ## convert response to table
   ## show metadata
-  ## return result table
+  ## return result table only as data.frame
   out <- list()
   out[["callurl"]] <- callurl
   out[["usedArgs"]] <- usedArgs
