@@ -38,19 +38,19 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
     for (i in reqMatch) {
       switch(i,
              "dataType" = {
-               match.arg2(arg = usedArgs[[i]],
+               brapi_matchArg(arg = usedArgs[[i]],
                           choices =  c("",
                                        "application/json",
                                        "text/csv",
                                        "text/tsv",
                                        "application/flapjack"))},
              "format" = {
-               match.arg2(arg = usedArgs[[i]],
+               brapi_matchArg(arg = usedArgs[[i]],
                           choices =  c("csv",
                                        "tsv",
                                        "flapjack"))},
              "listType" = {
-               match.arg2(arg = usedArgs[[i]],
+               brapi_matchArg(arg = usedArgs[[i]],
                           choices =  c("",
                                        "germplasm",
                                        "markers",
@@ -62,7 +62,7 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
                                        "studies",
                                        "trials"))},
              "sortBy" = {
-               match.arg2(arg = usedArgs[[i]],
+               brapi_matchArg(arg = usedArgs[[i]],
                           choices =  c("",
                                        "endDate",
                                        "locationDbId",
@@ -77,7 +77,7 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
                                        "trialDbId",
                                        "trialName"))},
              "sortOrder" = {
-               match.arg2(arg = usedArgs[[i]],
+               brapi_matchArg(arg = usedArgs[[i]],
                           choices =  c("",
                                        "asc",
                                        "ASC",
