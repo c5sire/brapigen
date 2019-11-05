@@ -41,10 +41,17 @@ brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
                                reqArgs = "{{required}}",
                                packageName = "{{package}}",
                                callVersion = {{version}})
-  ## get respones
-  ## convert response to table
-  ## show metadata
-  ## return result table only as data.frame
+
+  try({
+    ## Make the call and receive the response
+    resp <- brapi_GET(callurl = callurl, usedArgs = usedArgs)
+    ## Extract the content from the response object
+    cont <- httr::content(x = resp, as = "text", encoding = "UTF-8")
+    ## Convert the content object into a data.frame
+    ## show metadata
+    ## return result table only as data.frame
+  })
+  ## Temporary
   out <- list()
   out[["callurl"]] <- callurl
   out[["usedArgs"]] <- usedArgs
