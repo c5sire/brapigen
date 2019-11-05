@@ -1,4 +1,4 @@
-### Internal function to match character aruments
+### Internal function to match character a argument
 ### Revision of match.arg to be able to match empty strings
 brapi_matchArg <- function(arg, choices, several.ok = FALSE) {
   if (missing(choices)) {
