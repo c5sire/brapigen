@@ -1,5 +1,6 @@
+### Internal function to match character aruments
 ### Revision of match.arg to be able to match empty strings
-match.arg2 <- function(arg, choices, several.ok = FALSE) {
+brapi_matchArg <- function(arg, choices, several.ok = FALSE) {
   if (missing(choices)) {
     formal.args <- formals(sys.function(sys.parent()))
     choices <- eval(formal.args[[as.character(substitute(arg))]])
@@ -23,7 +24,7 @@ match.arg2 <- function(arg, choices, several.ok = FALSE) {
   }
   i <- i[i > 0L]
   if (!several.ok && length(i) > 1) {
-    stop("there is more than one match in 'match.arg2'")
+    stop("there is more than one match in 'brapi_matchArg'")
   }
   return(choices[i])
 }
