@@ -1,3 +1,4 @@
+### Internal function to create a callURL for a GET call
 brapi_GET_callURL <- function(usedArgs, callPath, reqArgs, packageName, callVersion) {
   if (is.null(usedArgs[["con"]])) {return(NULL)}
   ## Preprocess required arguments
@@ -19,16 +20,17 @@ brapi_GET_callURL <- function(usedArgs, callPath, reqArgs, packageName, callVers
                                           split = "-")[[1]][1]), # yields brapi
                          "/",
                          version)
-  ## Correction for multicrop databases when call does not require {crop}
+  ## Correction for multicrop databases when call does not require {commoncropname}
   if (callPath == "/commoncropnames" || callPath == "/calls") {
     usedArgs[["con"]][["multicrop"]] <- FALSE
   }
-  ## Create pointbase callurl: http(s)://db:port/{apipath}/{crop}/brapi/v?
+  ## Create pointbase callurl:
+  ## http(s)://db:port/{apipath}/{commoncropname}/brapi/v?
   if (usedArgs[["con"]][["multicrop"]]) {
     callurl <- paste0(usedArgs[["con"]][["protocol"]],
                       usedArgs[["con"]][["db"]],
                       port, usedArgs[["con"]][["apipath"]],
-                        "/", usedArgs[["con"]][["crop"]], brapiVersion)
+                        "/", usedArgs[["con"]][["commoncropname"]], brapiVersion)
   } else {
     callurl <- paste0(usedArgs[["con"]][["protocol"]],
                       usedArgs[["con"]][["db"]],
