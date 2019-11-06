@@ -15,19 +15,19 @@
 #' @export
 print.brapi_con <- function(x, ...) {
   # Print in console
-  txt <- paste0("Crop = ", x$crop, "\n\n")
+  txt <- paste0("Crop = ", x$commoncropname, "\n\n")
   txt <- paste0(txt, "Address:Port = ", x$db, ":", x$port, "\n")
   cat(paste0(txt, "User = ", x$user, "\n"))
   return(invisible())
 }
 
 #' @title
-#' print.brapi_dbList
+#' print.brapi_db
 #'
 #' @description
-#' print method for an object of class brapi_dbList.
+#' Print method for an object of class brapi_db.
 #'
-#' @param x list; a `brapi_dbList` class object.
+#' @param x list; a `brapi_db` class object.
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @author brapir generator package
@@ -35,7 +35,7 @@ print.brapi_con <- function(x, ...) {
 #' @family brapiutils
 #'
 #' @export
-print.brapi_dbList <- function(x, ...) {
+print.brapi_db <- function(x, ...) {
   names(x) %>% sort %>% paste(collapse = "\n") %>% cat
   return(invisible())
 }
