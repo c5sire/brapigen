@@ -1,5 +1,6 @@
-### Internal function to match character a argument
-### Revision of match.arg to be able to match empty strings
+### Internal function to match an argument of type character with limited
+### options where also an empty string "" is possible
+### Revision of match.arg to be able to match empty strings ""
 brapi_matchArg <- function(arg, choices, several.ok = FALSE) {
   if (missing(choices)) {
     formal.args <- formals(sys.function(sys.parent()))
