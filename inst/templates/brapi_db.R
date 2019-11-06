@@ -4,6 +4,12 @@
 #' @description
 #' A white list of known BrAPI compliant databases.
 #'
+#' @details
+#' Extended the function call with $database_name. White listed values for
+#' database_name are: apiary, bms_test, cassavabase, cropontology, eu_sol,
+#' genesys, germinate, icrisat_prod, mgis, musabase, ricebase, snpseek,
+#' sweetpotatobase, terraref, testserver, t3s, tto, ttw, yambase.
+#'
 #' @return An BrAPI compliant database connection object of class brapi_db.
 #'
 #' @author brapir generator package

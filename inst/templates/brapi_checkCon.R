@@ -4,8 +4,8 @@
 #' @description
 #' Checks if a BrAPI compliant database can be reached given the connection details.
 #'
-#' @param con list; required: **TRUE**; BrAPI connection object
-#' @param verbose logical; default is TRUE
+#' @param con list; required: **TRUE**; BrAPI connection object of class `brapi_con`.
+#' @param verbose logical; Default is TRUE, other possible value is "FALSE.
 #' @param brapi_calls character; Use to check if one or more calls are implemented by the server according to the calls url. Default is "any".
 #'
 #' @details
