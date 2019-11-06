@@ -44,7 +44,7 @@ brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
 
   try({
     ## Make the call and receive the response
-    resp <- brapi_GET(callurl = callurl, usedArgs = usedArgs)
+    resp <- brapi_GET(url = callurl, usedArgs = usedArgs)
     ## Extract the content from the response object
     cont <- httr::content(x = resp, as = "text", encoding = "UTF-8")
     ## Convert the content object into a data.frame
