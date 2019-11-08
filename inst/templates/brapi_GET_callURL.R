@@ -27,6 +27,12 @@ brapi_GET_callURL <- function(usedArgs, callPath, reqArgs, packageName, callVers
   ## Create pointbase callurl:
   ## http(s)://db:port/{apipath}/{commoncropname}/brapi/v?
   if (usedArgs[["con"]][["multicrop"]]) {
+    if (usedArgs[["con"]][["commoncropname"]] == "") {
+      stop('In the connection object there needs to be a commoncropname for a multicrop system.')
+    }
+    if (length(usedArgs[["con"]][["commoncropname"]]) > 1) {
+      stop('In the connection object there can only be one commoncropname be specified for a multicrop system.')
+    }
     callurl <- paste0(usedArgs[["con"]][["protocol"]],
                       usedArgs[["con"]][["db"]],
                       port, usedArgs[["con"]][["apipath"]],
