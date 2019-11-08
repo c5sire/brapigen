@@ -48,14 +48,14 @@ brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
     ## Extract the content from the response object in human readable form
     cont <- httr::content(x = resp, as = "text", encoding = "UTF-8")
     ## Convert the content object into a data.frame
-    ## out <- brapi_cont2df(cont, usedArgs)
+    out <- brapi_result2df(cont, usedArgs)
     ## show metadata
     ## return result table only as data.frame
   })
   ## Temporary
-  out <- list()
-  out[["callurl"]] <- callurl
-  out[["usedArgs"]] <- usedArgs
-  class(out) <- "brapi_{{verb}}_{{name}}"
+  # out <- list()
+  # out[["callurl"]] <- callurl
+  # out[["usedArgs"]] <- usedArgs
+  class(out) <- c(class(out), "brapi_{{verb}}_{{name}}")
   return(out)
 }
