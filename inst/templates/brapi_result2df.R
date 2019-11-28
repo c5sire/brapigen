@@ -1,5 +1,5 @@
 ### Internal function for parsing the result part of the response content into
-### a data.frame object
+### a flattened data.frame object
 brapi_result2df <- function(cont, usedArgs) {
   if ("format" %in% names(usedArgs)) {
     ## three possibilities "csv", "tsv" and "flapjack"
