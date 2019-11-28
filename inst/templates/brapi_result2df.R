@@ -25,22 +25,36 @@ brapi_result2df <- function(cont, usedArgs) {
     contList <- jsonlite::fromJSON(txt = cont)
     ## Use only the result element from the content list (contList)
     resultList <- contList[["result"]]
-    if ("data" %in% names(resultList) && length(resultList) == 1) {
-      ## Only "data" element (Payload: detail)
-      dat <- as.data.frame(x = resultList[["data"]], stringsAsFactors = FALSE)
-      for (colName in names(dat)) {
-        if (class(dat[[colName]]) == "list") {
-          dat[[colName]] <- vapply(X = dat[[colName]],
-                                   FUN = paste,
-                                   FUN.VALUE = "",
-                                   collapse = "; ")
-        }
-      }
-    }
     ## resultList can consist of:
     ## 1) master (no pagination only one line)
     ## 2) detail (only a "data" element)
-    ## 3) master/detail (first parse "data" element and repeat master part to match dimensions)
+    ## 3) master/detail (parse "data" element and repeat master part to match dimensions)
+    if ("data" %in% names(resultList)) {
+      payload <- ifelse(test = length(resultList) == 1,
+                        yes = "detail",
+                        no = "master/detail")
+    } else {
+      payload <- "master"
+    }
+    switch(payload,
+           "master" = {
+             dat <- as.data.frame(resultList,
+                                  stringsAsFactors = FALSE)
+           },
+           "detail" = {
+             dat <- as.data.frame(x = resultList[["data"]],
+                                  stringsAsFactors = FALSE)
+             for (colName in names(dat)) {
+               if (class(dat[[colName]]) == "list") {
+                 dat[[colName]] <- vapply(X = dat[[colName]],
+                                          FUN = paste,
+                                          FUN.VALUE = "",
+                                          collapse = "; ")
+               }
+             }
+           },
+           "master/detail" = {##headerRow! e.g. /search/observationtables/{searchResultsDbId}
+             })
   }
   return(dat)
 }
