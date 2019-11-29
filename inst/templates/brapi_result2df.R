@@ -38,23 +38,37 @@ brapi_result2df <- function(cont, usedArgs) {
     }
     switch(payload,
            "master" = {
-             dat <- as.data.frame(resultList,
-                                  stringsAsFactors = FALSE)
+             master <- as.data.frame(resultList,
+                                     stringsAsFactors = FALSE)
+             dat <- master
            },
            "detail" = {
-             dat <- as.data.frame(x = resultList[["data"]],
-                                  stringsAsFactors = FALSE)
-             for (colName in names(dat)) {
-               if (class(dat[[colName]]) == "list") {
-                 dat[[colName]] <- vapply(X = dat[[colName]],
-                                          FUN = paste,
-                                          FUN.VALUE = "",
-                                          collapse = "; ")
+             detail <- as.data.frame(x = resultList[["data"]],
+                                     stringsAsFactors = FALSE)
+             for (colName in names(detail)) {
+               if (class(detail[[colName]]) == "list") {
+                 detail[[colName]] <- vapply(X = detail[[colName]],
+                                             FUN = paste,
+                                             FUN.VALUE = "",
+                                             collapse = "; ")
                }
              }
+             dat <- detail
            },
            "master/detail" = {##headerRow! e.g. /search/observationtables/{searchResultsDbId}
-             })
+             detail <- as.data.frame(x = resultList[["data"]],
+                                     stringsAsFactors = FALSE)
+             for (colName in names(detail)) {
+               if (class(detail[[colName]]) == "list") {
+                 detail[[colName]] <- vapply(X = detail[[colName]],
+                                             FUN = paste,
+                                             FUN.VALUE = "",
+                                             collapse = "; ")
+               }
+             }
+             master <- resultList[!names(resultList) %in% "data"]
+             dat <- cbind(as.data.frame(master, stringsAsFactors = FALSE), detail)
+           })
   }
   return(dat)
 }
