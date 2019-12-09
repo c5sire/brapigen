@@ -38,9 +38,14 @@ brapi_result2df <- function(cont, usedArgs) {
     }
     switch(payload,
            "master" = {
-             master <- as.data.frame(resultList,
-                                     stringsAsFactors = FALSE)
-             dat <- master
+             if (all(lengths(resultList) <= 1)) {
+               master <- as.data.frame(resultList[lengths(resultList) == 1],
+                                       stringsAsFactors = FALSE)
+               dat <- master
+             } else {
+
+             }
+
            },
            "detail" = {
              detail <- as.data.frame(x = resultList[["data"]],
