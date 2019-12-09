@@ -39,13 +39,34 @@ brapi_result2df <- function(cont, usedArgs) {
     switch(payload,
            "master" = {
              if (all(lengths(resultList) <= 1)) {
+               ## use only lengths == 1
                master <- as.data.frame(resultList[lengths(resultList) == 1],
                                        stringsAsFactors = FALSE)
                dat <- master
              } else {
-
+               master <- as.data.frame(resultList[lengths(resultList) == 1],
+                                       stringsAsFactors = FALSE)
+               tempmaster <- list()
+               for (elname in names(which(lengths(resultList) > 1))) {
+                 switch(class(resultList[[elname]]),
+                        "character" = {
+                          tempmaster[[elname]] <- paste(resultList[[elname]],
+                                                        collapse = ", ")
+                        },
+                        "data.frame" = {
+                          for (i in seq_len(nrow(resultList[[elname]]))) {
+                            for (j in seq_along(resultList[[elname]])) {
+                              tempmaster[[paste(elname, colnames(resultList[[elname]][j]),
+                                                i,
+                                                sep = ".")]] <- resultList[[elname]][i, j]
+                            }
+                          }
+                        })
+               }
+               tempmaster < as.data.frame(tempmaster,
+                                          stringsAsFactors = FALSE)
+               dat <- cbind(master, tempmaster)
              }
-
            },
            "detail" = {
              detail <- as.data.frame(x = resultList[["data"]],
