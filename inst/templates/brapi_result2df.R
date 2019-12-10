@@ -32,7 +32,7 @@ brapi_result2df <- function(cont, usedArgs) {
     if ("data" %in% names(resultList)) {
       payload <- ifelse(test = length(resultList) == 1,
                         yes = "detail",
-                        no = "master/detail")
+                        no =  "master/detail")
     } else {
       payload <- "master"
     }
@@ -47,30 +47,41 @@ brapi_result2df <- function(cont, usedArgs) {
                master <- as.data.frame(resultList[lengths(resultList) == 1],
                                        stringsAsFactors = FALSE)
                tempmaster <- list()
-               for (elname in names(which(lengths(resultList) > 1))) {
-                 switch(class(resultList[[elname]]),
+               for (l1name in names(which(lengths(resultList) > 1))) {
+                 switch(class(resultList[[l1name]]),
                         "character" = {
-                          tempmaster[[elname]] <- paste(resultList[[elname]],
+                          tempmaster[[l1name]] <- paste(resultList[[l1name]],
                                                         collapse = ", ")
                         },
                         "data.frame" = {
-                          for (i in seq_len(nrow(resultList[[elname]]))) {
-                            for (j in seq_along(resultList[[elname]])) {
-                              tempmaster[[paste(elname, colnames(resultList[[elname]][j]),
+                          for (i in seq_len(nrow(resultList[[l1name]]))) {
+                            for (j in seq_along(resultList[[l1name]])) {
+                              tempmaster[[paste(l1name,
+                                                colnames(resultList[[l1name]][j]),
                                                 i,
-                                                sep = ".")]] <- resultList[[elname]][i, j]
+                                                sep = ".")]] <- resultList[[l1name]][i, j]
                             }
                           }
-                        })
+                        },
+                        "list" = {
+                          templist <- as.list(data.frame(t(as.matrix(unlist(as.relistable(resultList[[l1name]])))),
+                                                             stringsAsFactors = FALSE))
+                          names(templist) <- paste(l1name, names(templist), sep = ".")
+                          tempmaster <- c(tempmaster, templist)
+                        }
+                 )
                }
-               tempmaster < as.data.frame(tempmaster,
-                                          stringsAsFactors = FALSE)
-               dat <- cbind(master, tempmaster)
+               dat <- cbind(master, as.data.frame(tempmaster, stringsAsFactors = FALSE))
              }
            },
            "detail" = {
-             detail <- as.data.frame(x = resultList[["data"]],
-                                     stringsAsFactors = FALSE)
+             if (class(resultList[["data"]]) == "data.frame") {
+               detail <- as.data.frame(x = jsonlite::flatten(resultList[["data"]], recursive = TRUE),
+                                       stringsAsFactors = FALSE)
+             } else {
+               detail <- as.data.frame(x = resultList[["data"]],
+                                       stringsAsFactors = FALSE)
+             }
              for (colName in names(detail)) {
                if (class(detail[[colName]]) == "list") {
                  detail[[colName]] <- vapply(X = detail[[colName]],
