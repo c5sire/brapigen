@@ -1,6 +1,21 @@
 ### Internal function for parsing the result part of the response content into
 ### a flattened data.frame object
 brapi_result2df <- function(cont, usedArgs) {
+  ## Helper functions
+  jointDetail <- function(detailDat, colName) {
+    detailDatCol <- data.frame(detailDat[[colName]],
+                               stringsAsFactors = FALSE)
+    detailDat[[colName]] <- NULL
+    if (nrow(detailDatCol) > 0) {
+      detailDat <-  detailDat[rep(seq_len(nrow(detailDat)), each = nrow(detailDatCol)), ]
+      df <- cbind(detailDat, detailDatCol)
+    } else {# nrow(detailDatCol) == 0
+      df <- detailDat
+    }
+    row.names(df) <- seq_len(nrow(df))
+    return(df)
+  }
+  ## Process result to data.frame
   if ("format" %in% names(usedArgs)) {
     ## three possibilities "csv", "tsv" and "flapjack"
     switch(usedArgs[["format"]],
@@ -83,12 +98,28 @@ brapi_result2df <- function(cont, usedArgs) {
                                        stringsAsFactors = FALSE)
              }
              for (colName in names(detail)) {
-               if (class(detail[[colName]]) == "list") {
-                 detail[[colName]] <- vapply(X = detail[[colName]],
-                                             FUN = paste,
-                                             FUN.VALUE = "",
-                                             collapse = "; ")
-               }
+               switch(class(detail[[colName]]),
+                      "list" = {
+                        ## list of data.frame
+                        if (all(sapply(X = detail[[colName]],
+                                       FUN = class) == "data.frame")) {
+                          tempDetail <- jointDetail(detail[1, ], colName)
+                          nrows <- nrow(detail)
+                          if (nrows > 1) {
+                            for (i in 2:nrows) {
+                              nextRow <- jointDetail(detail[i, ], colName)
+                              tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
+                            }
+                          }
+                          tempDetail[[colName]] <- NULL
+                          ## Remove duplicated rows
+                          tempDetail <- tempDetail[!duplicated(tempDetail), ]
+                          ## Row renumbering
+                          rownames(tempDetail) <- seq_len(nrow(tempDetail))
+                          detail <- tempDetail
+                        }
+                      }#,
+               )
              }
              dat <- detail
            },
