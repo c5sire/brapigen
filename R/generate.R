@@ -319,10 +319,7 @@ POSTcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "POST")
 PUTcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "PUT")
 
 ### Create aCall object containing call elements
-### tested on:
-### * calls
-### * commoncropnames
-### * markers
+### tested on: see examples_brapigen-brapir_test-server_brapi_org.R
 ### * germplasm_germplasmDbId_attributes
 ### * search_observationtables_searchResultsDbId
 ### * studies_studyDbId_layouts
