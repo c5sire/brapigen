@@ -50,7 +50,8 @@ brapi_connect <- function(brapiDb = NULL,
   brapi <- NULL
   if (!is.null(brapiDb)) {
     # brapiDb agrument was not NULL but passed
-    if (all(class(brapiDb) == c("list", "brapi_db", "brapi", "brapi_con"))) {
+    if (all(sapply(X = c("list", "brapi_db", "brapi", "brapi_con"),
+                   FUN = function(i) {inherits(brapiDb, what = i)}))) {
       brapi <- brapiDb
     }
   } else {
