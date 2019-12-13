@@ -33,7 +33,7 @@ brapi_db <- function() {
                           port = 48080,
                           apipath = "bmsapi",
                           multicrop = TRUE,
-                          crop = "",
+                          commoncropname = "",
                           user = "",
                           password = "",
                           bms = TRUE)
