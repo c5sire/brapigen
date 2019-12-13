@@ -5,6 +5,9 @@ brapi_result2df <- function(cont, usedArgs) {
   jointDetail <- function(detailDat, colName) {
     detailDatCol <- data.frame(detailDat[[colName]],
                                stringsAsFactors = FALSE)
+    if (!colName %in% c("taxonIds", "studies")) {
+      names(detailDatCol) <- paste(colName, names(detailDatCol), sep = ".")
+    }
     detailDat[[colName]] <- NULL
     if (nrow(detailDatCol) > 0) {
       detailDat <-  detailDat[rep(seq_len(nrow(detailDat)), each = nrow(detailDatCol)), ]
@@ -83,58 +86,152 @@ brapi_result2df <- function(cont, usedArgs) {
                                                              stringsAsFactors = FALSE))
                           names(templist) <- paste(l1name, names(templist), sep = ".")
                           tempmaster <- c(tempmaster, templist)
-                        }
-                 )
+                        })
                }
                dat <- cbind(master, as.data.frame(tempmaster, stringsAsFactors = FALSE))
              }
            },
            "detail" = {
-             if (class(resultList[["data"]]) == "data.frame") {
-               detail <- as.data.frame(x = jsonlite::flatten(resultList[["data"]], recursive = TRUE),
+             if (inherits(resultList[["data"]], what = "data.frame")) {
+               detail <- as.data.frame(x = jsonlite::flatten(resultList[["data"]],
+                                                             recursive = TRUE),
                                        stringsAsFactors = FALSE)
              } else {
                detail <- as.data.frame(x = resultList[["data"]],
                                        stringsAsFactors = FALSE)
              }
-             for (colName in names(detail)) {
-               switch(class(detail[[colName]]),
-                      "list" = {
-                        ## list of data.frame
-                        if (all(sapply(X = detail[[colName]],
-                                       FUN = class) == "data.frame")) {
-                          tempDetail <- jointDetail(detail[1, ], colName)
-                          nrows <- nrow(detail)
-                          if (nrows > 1) {
-                            for (i in 2:nrows) {
-                              nextRow <- jointDetail(detail[i, ], colName)
-                              tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
-                            }
-                          }
-                          tempDetail[[colName]] <- NULL
-                          ## Remove duplicated rows
-                          tempDetail <- tempDetail[!duplicated(tempDetail), ]
-                          ## Row renumbering
-                          rownames(tempDetail) <- seq_len(nrow(tempDetail))
-                          detail <- tempDetail
-                        }
-                      }#,
-               )
+             namesListCols <- names(which(sapply(X = detail,
+                                                 FUN = inherits,
+                                                 what = "list")))
+             for (colName in namesListCols) {
+               ## list of data.frame
+               if (all(sapply(X = detail[[colName]],
+                              FUN = inherits,
+                              what = "data.frame"))) {
+                 tempDetail <- jointDetail(detail[1, ], colName)
+                 nrows <- nrow(detail)
+                 if (nrows > 1) {
+                   for (i in 2:nrows) {
+                     nextRow <- jointDetail(detail[i, ], colName)
+                     tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
+                     rm(nextRow)
+                   }
+                 }
+                 tempDetail[[colName]] <- NULL
+                 ## Remove duplicated rows
+                 tempDetail <- tempDetail[!duplicated(tempDetail), ]
+                 ## Row renumbering
+                 rownames(tempDetail) <- seq_len(nrow(tempDetail))
+               }
+               ## list of character
+               if (all(sapply(X = detail[[colName]],
+                              FUN = inherits,
+                              what = "character"))) {
+                 detail[[colName]] <- sapply(X = detail[[colName]],
+                                             FUN = paste,
+                                             collapse = "; ")
+               }
+               ## list of list
+               if (all(sapply(X = detail[[colName]],
+                              FUN = inherits, what = "list"))) {
+                 if (all(lengths(detail[[colName]]) == 0)) {
+                   ## list of empty lists
+                   detail[[colName]] <- NULL
+                 }
+               }
+               if (exists("tempDetail")) {
+                 detail <- tempDetail
+                 rm(tempDetail)
+               }
              }
              dat <- detail
            },
            "master/detail" = {##headerRow! e.g. /search/observationtables/{searchResultsDbId}
-             detail <- as.data.frame(x = resultList[["data"]],
-                                     stringsAsFactors = FALSE)
-             for (colName in names(detail)) {
-               if (class(detail[[colName]]) == "list") {
-                 detail[[colName]] <- vapply(X = detail[[colName]],
+             ## Process master part
+             masterList <- resultList[!names(resultList) %in% "data"]
+             if (!all(lengths(masterList) <= 1)) {
+               master <- masterList[lengths(masterList) == 1]
+               tempmaster <- list()
+               for (l1name in names(which(lengths(masterList) > 1))) {
+                 switch(class(masterList[[l1name]]),
+                        "character" = {
+                          tempmaster[[l1name]] <- paste(masterList[[l1name]],
+                                                        collapse = ", ")
+                        },
+                        "data.frame" = {
+                          for (i in seq_len(nrow(masterList[[l1name]]))) {
+                            for (j in seq_along(masterList[[l1name]])) {
+                              tempmaster[[paste(l1name,
+                                                colnames(masterList[[l1name]][j]),
+                                                i,
+                                                sep = ".")]] <- masterList[[l1name]][i, j]
+                            }
+                          }
+                        },
+                        "list" = {
+                          templist <- as.list(data.frame(t(as.matrix(unlist(as.relistable(masterList[[l1name]])))),
+                                                         stringsAsFactors = FALSE))
+                          names(templist) <- paste(l1name, names(templist), sep = ".")
+                          tempmaster <- c(tempmaster, templist)
+                        })
+               }
+               master <- c(master, tempmaster)
+             } else {
+               master <-  masterList[lengths(masterList) == 1]
+             }
+             ## Process detail part
+             if (inherits(resultList[["data"]], what = "data.frame")) {
+               detail <- as.data.frame(x = jsonlite::flatten(resultList[["data"]],
+                                                             recursive = TRUE),
+                                       stringsAsFactors = FALSE)
+             } else {
+               detail <- as.data.frame(x = resultList[["data"]],
+                                       stringsAsFactors = FALSE)
+             }
+             namesListCols <- names(which(sapply(X = detail,
+                                                 FUN = inherits,
+                                                 what = "list")))
+             for (colName in namesListCols) {
+               ## list of data.frame
+               if (all(sapply(X = detail[[colName]],
+                              FUN = inherits,
+                              what = "data.frame"))) {
+                 tempDetail <- jointDetail(detail[1, ], colName)
+                 nrows <- nrow(detail)
+                 if (nrows > 1) {
+                   for (i in 2:nrows) {
+                     nextRow <- jointDetail(detail[i, ], colName)
+                     tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
+                     rm(nextRow)
+                   }
+                 }
+                 tempDetail[[colName]] <- NULL
+                 ## Remove duplicated rows
+                 tempDetail <- tempDetail[!duplicated(tempDetail), ]
+                 ## Row renumbering
+                 rownames(tempDetail) <- seq_len(nrow(tempDetail))
+               }
+               ## list of character
+               if (all(sapply(X = detail[[colName]],
+                              FUN = inherits,
+                              what = "character"))) {
+                 detail[[colName]] <- sapply(X = detail[[colName]],
                                              FUN = paste,
-                                             FUN.VALUE = "",
                                              collapse = "; ")
                }
+               ## list of list
+               if (all(sapply(X = detail[[colName]],
+                              FUN = inherits, what = "list"))) {
+                 if (all(lengths(detail[[colName]]) == 0)) {
+                   ## list of empty lists
+                   detail[[colName]] <- NULL
+                 }
+               }
+               if (exists("tempDetail")) {
+                 detail <- tempDetail
+                 rm(tempDetail)
+               }
              }
-             master <- resultList[!names(resultList) %in% "data"]
              dat <- cbind(as.data.frame(master, stringsAsFactors = FALSE), detail)
            })
   }
