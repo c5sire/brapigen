@@ -16,7 +16,9 @@ brapi_get_locations(con = con)#, locationType = "Storage location")
 brapi_get_trials(con = con)
 brapi_get_seasons(con = con)
 brapi_get_studies(con = con)
+brapi_get_studies_studyDbId_layouts(con = con, studyDbId = "1001") # CONTINUE HERE!
 brapi_get_markers(con = con)
+
 
 ## result section: Master/Detail
 brapi_get_studies_studyDbId_germplasm(con = con, studyDbId = "1001")
