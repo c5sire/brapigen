@@ -14,6 +14,6 @@
 #'
 #' @export
 is.brapi_con <- function(obj) {
-  res <- "brapi_con" %in% class(obj)
+  res <- inherits(x = obj, what = "brapi_con")
   return(res)
 }
