@@ -23,19 +23,19 @@ brapi_result2df <- function(cont, usedArgs) {
     ## three possibilities "csv", "tsv" and "flapjack"
     switch(usedArgs[["format"]],
            "csv" = {
-             out <- read.csv(file = textConnection(cont),
+             dat <- read.csv(file = textConnection(cont),
                              stringsAsFactors = FALSE)
-             colnames(out) <- gsub(pattern = "\\.",
+             colnames(dat) <- gsub(pattern = "\\.",
                                    replacement = "|",
-                                   x = colnames(out))},
+                                   x = colnames(dat))},
            "tsv" = {
-             out <- read.delim(file = textConnection(cont),
+             dat <- read.delim(file = textConnection(cont),
                                stringsAsFactors = FALSE)
-             colnames(out) <- gsub(pattern = "\\.",
+             colnames(dat) <- gsub(pattern = "\\.",
                                    replacement = "|",
-                                   x = colnames(out))},
+                                   x = colnames(dat))},
            "flapjack" = {
-             out <- read.delim(file = textConnection(cont),
+             dat <- read.delim(file = textConnection(cont),
                                stringsAsFactors = FALSE)})
   } else {
     ## Parse JSON content into a list that consists of a metadata and result
@@ -221,7 +221,8 @@ brapi_result2df <- function(cont, usedArgs) {
                }
                ## list of list
                if (all(sapply(X = detail[[colName]],
-                              FUN = inherits, what = "list"))) {
+                              FUN = inherits,
+                              what = "list"))) {
                  if (all(lengths(detail[[colName]]) == 0)) {
                    ## list of empty lists
                    detail[[colName]] <- NULL
