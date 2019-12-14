@@ -320,65 +320,63 @@ PUTcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "PUT")
 
 ### Create aCall object containing call elements
 ### tested on: see openapi/examples_brapigen-brapir_test-server_brapi_org.R
-### * search_observationtables_searchResultsDbId
-### * studies_studyDbId_layouts
-### * studies_studyDbId_observations
-### * maps_mapDbId_positions_linkageGroupName # has two required arguments
-aCall <- getCall(brapiSpecs = brapiSpecs, idName = "calls")
-### Create aCallDesc object containing call description
-aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
-                                                           pattern =  c("\\n\\n\\n"),
-                                                           replacement =  "\\\n\\\n"),
-                         pattern =  c("\\n\\n"),
-                         replacement =  "\n#' ")
+for (callName in GETcalls) {
+  aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName)
+  ### Create aCallDesc object containing call description
+  aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
+                                                             pattern =  c("\\n\\n\\n"),
+                                                             replacement =  "\\\n\\\n"),
+                           pattern =  c("\\n\\n"),
+                           replacement =  "\n#' ")
 
-### Create @param description for documentation
-aCallParam <- aCallParamVector(aCall = aCall)
-aCallParam <- whisker::iteratelist(x = aCallParam, value = "pname")
-aCallParam <- lapply(X = aCallParam,
-                     FUN = function(el) {
-                       lapply(X = el, FUN = function(elel) {
-                         stringr::str_replace_all(string = elel,
-                                                  pattern = "\\n\\n",
-                                                  replacement = "\n#' ")})})
+  ### Create @param description for documentation
+  aCallParam <- aCallParamVector(aCall = aCall)
+  aCallParam <- whisker::iteratelist(x = aCallParam, value = "pname")
+  aCallParam <- lapply(X = aCallParam,
+                       FUN = function(el) {
+                         lapply(X = el, FUN = function(elel) {
+                           stringr::str_replace_all(string = elel,
+                                                    pattern = "\\n\\n",
+                                                    replacement = "\n#' ")})})
 
-### Creation function arguments for selected call
-aCallArgs <- aCallParamString(aCall = aCall)
+  ### Creation function arguments for selected call
+  aCallArgs <- aCallParamString(aCall = aCall)
 
-### Identify and store required arguments
-aCall <- aCallReqArgs(aCall = aCall)
+  ### Identify and store required arguments
+  aCall <- aCallReqArgs(aCall = aCall)
 
-### Store call family information for documentation
-aCallFamily <- c(
-  paste0(tolower(strsplit(x = brapiSpecs[["info"]][["title"]], split = "-")[[1]][1]),
-         "_",
-         brapiSpecs[["info"]][["version"]]),
-  aCall[["tags"]]
-)
-aCallFamily <- whisker::iteratelist(aCallFamily, value = "fname")
+  ### Store call family information for documentation
+  aCallFamily <- c(
+    paste0(tolower(strsplit(x = brapiSpecs[["info"]][["title"]], split = "-")[[1]][1]),
+           "_",
+           brapiSpecs[["info"]][["version"]]),
+    aCall[["tags"]]
+  )
+  aCallFamily <- whisker::iteratelist(aCallFamily, value = "fname")
 
-### Create call data for the selected call
-aCallData <- list(name = aCall[["name"]],
-                  summary = aCall[["summary"]],
-                  parameters = aCallParam,
-                  description = aCallDesc,
-                  family = aCallFamily,
-                  arguments = aCallArgs,
-                  required = aCall[["required"]],
-                  verb = aCall[["verb"]],
-                  call = aCall[["call"]],
-                  package = brapiSpecs[["info"]][["title"]],
-                  version = brapiSpecs[["info"]][["version"]],
-                  tag = aCall[["tags"]])
+  ### Create call data for the selected call
+  aCallData <- list(name = aCall[["name"]],
+                    summary = aCall[["summary"]],
+                    parameters = aCallParam,
+                    description = aCallDesc,
+                    family = aCallFamily,
+                    arguments = aCallArgs,
+                    required = aCall[["required"]],
+                    verb = aCall[["verb"]],
+                    call = aCall[["call"]],
+                    package = brapiSpecs[["info"]][["title"]],
+                    version = brapiSpecs[["info"]][["version"]],
+                    tag = aCall[["tags"]])
 
-### Load template for function name
-template <- readLines(con = "inst/templates/function_name.mst")
-### Create function name
-functionName <- whisker::whisker.render(template = template,
-                                        data = aCallData)
-### Load template to create the GET function
-template <- readLines(con = "inst/templates/function_GET.mst")
-### Write the created GET function
-writeLines(text = whisker::whisker.render(template = template,
-                                          data = aCallData),
-           con = paste0(dir_r, functionName, ".R"))
+  ### Load template for function name
+  template <- readLines(con = "inst/templates/function_name.mst")
+  ### Create function name
+  functionName <- whisker::whisker.render(template = template,
+                                          data = aCallData)
+  ### Load template to create the GET function
+  template <- readLines(con = "inst/templates/function_GET.mst")
+  ### Write the created GET function
+  writeLines(text = whisker::whisker.render(template = template,
+                                            data = aCallData),
+             con = paste0(dir_r, functionName, ".R"))
+}
