@@ -17,6 +17,7 @@ brapi_get_trials(con = con)
 brapi_get_seasons(con = con)
 brapi_get_studies(con = con)
 brapi_get_studies_studyDbId_layouts(con = con, studyDbId = "1001") # CONTINUE HERE!
+brapi_get_studies_studyDbId_observations(con = con, studyDbId = "1001")# , observationVariableDbIds = '', page = 0, pageSize = 1000)
 brapi_get_markers(con = con)
 
 
