@@ -5,7 +5,7 @@ brapi_result2df <- function(cont, usedArgs) {
   jointDetail <- function(detailDat, colName) {
     detailDatCol <- data.frame(detailDat[[colName]],
                                stringsAsFactors = FALSE)
-    if (!colName %in% c("taxonIds", "studies")) {
+    if (!colName %in% c("taxonIds", "seasons", "studies")) {
       names(detailDatCol) <- paste(colName, names(detailDatCol), sep = ".")
     }
     detailDat[[colName]] <- NULL
