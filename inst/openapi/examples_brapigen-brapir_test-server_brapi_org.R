@@ -8,7 +8,7 @@ brapi_get_studies_studyDbId(con = con, studyDbId = "1001") # 12
 brapi_get_germplasm_germplasmDbId(con = con, germplasmDbId = "3")
 
 ## result section: Detail
-brapi_get_calls(con = con) #, dataType = "application/json") # 1
+brapi_get_calls(con = con)#, dataType = "application/json") # 1
 brapi_get_commoncropnames(con = con)#, pageSize = 1, page = 1) # 2
 brapi_get_programs(con = con)#, commonCropName = "Tomatillo", programName = "Program 1", abbreviation = "P1", pageSize = 1, page = 0) # 3
 brapi_get_search_programs_searchResultsDbId(con = con, searchResultsDbId = "")#, pageSize = 1000, page = 0) # 4 (returns empty json!)
@@ -17,8 +17,9 @@ brapi_get_trials(con = con)#, commonCropName = "", programDbId = "", locationDbI
 brapi_get_search_studies_searchResultsDbId(con = con, searchResultsDbId = "")#, pageSize = 1000, page = 0) # 9 (returns empty json!)
 brapi_get_seasons(con = con)#, seasonDbId = "", season = "", year = "", pageSize = 1000, page = 0) # 10
 brapi_get_studies(con = con)#, commonCropName = "", studyTypeDbId = "", programDbId = "", locationDbId = "", seasonDbId = "", trialDbId = "", studyDbId = "", active = NA, sortBy = "", sortOrder = "", pageSize = 1000, page = 0) # 11
-brapi_get_studies_studyDbId_layouts(con = con, studyDbId = "1001") # CONTINUE HERE!
-brapi_get_studies_studyDbId_observations(con = con, studyDbId = "1001")# , observationVariableDbIds = '', page = 0, pageSize = 1000)
+brapi_get_studies_studyDbId_layouts(con = con, studyDbId = "1001")#, pageSize = 1000, page = 0) # 14 # returns a code 500 internal server error
+brapi_get_studies_studyDbId_observations(con = con, studyDbId = "1001")# , observationVariableDbIds = '', page = 0, pageSize = 1000) # 15
+brapi_get_studies_studyDbId_observationunits(con = con, studyDbId = "1001")#, observationLevel = "", pageSize = 1000, page = 0) # 16 CONTINUE HERE: ERROR!
 brapi_get_markers(con = con)
 
 
