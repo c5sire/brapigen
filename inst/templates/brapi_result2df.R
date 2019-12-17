@@ -16,6 +16,7 @@ brapi_result2df <- function(cont, usedArgs) {
       df <- detailDat
     }
     row.names(df) <- seq_len(nrow(df))
+    df <- jsonlite::flatten(df)
     return(df)
   }
   ## Process result to data.frame
