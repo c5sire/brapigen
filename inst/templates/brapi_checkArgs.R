@@ -9,6 +9,9 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
     if (grepl(pattern = ", ", x = reqArgs)) {
       reqArgs <- strsplit(x = reqArgs, split = ", ")[[1]]
     }
+    if (!all(reqArgs %in% names(usedArgs))) {
+      stop('Required argument(s): "', paste(reqArgs[!reqArgs %in% names(usedArgs)], collapse = ", "), '" is/are undefined!')
+    }
     reqArgs <- usedArgs[c(reqArgs)]
     for (i in names(reqArgs)) {
       ## Check if required argument is of type character
