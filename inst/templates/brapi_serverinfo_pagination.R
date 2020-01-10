@@ -1,5 +1,9 @@
 brapi_serverinfo_pagination <- function(cont) {
-  contList <- jsonlite::fromJSON(txt = cont)
+  if (jsonlite::validate(txt = cont)) {
+    contList <- jsonlite::fromJSON(txt = cont)
+  } else {
+    return()
+  }
   if (is.null(contList[["metadata"]])) {
     return()
   } else{
