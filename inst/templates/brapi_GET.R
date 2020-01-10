@@ -3,6 +3,16 @@ brapi_GET <- function(url, usedArgs) {
   brapi_message(msg = paste0("URL call was: ", url, "\n"))
   brapi_message(msg = paste0("Waiting for response from server: ...\n"))
 
+  if ("format" %in% names(usedArgs)) {
+    switch(usedArgs[["format"]],
+           "csv" = {
+             usedArgs[["Accept"]] <- "text/csv"},
+           "tsv" = {
+             usedArgs[["Accept"]] <- "text/tsv"},
+           "flapjack" = {
+             usedArgs[["Accept"]] <- "application/flapjack"})
+  }
+
   if ("Accept" %in% names(usedArgs)) {
     resp <- httr::GET(url = url,
                      httr::timeout(25),
