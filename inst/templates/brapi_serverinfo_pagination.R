@@ -8,7 +8,7 @@ brapi_serverinfo_pagination <- function(cont) {
       brapi_message(msg = paste0("Returning page ",
                                  pagination[["currentPage"]],
                                  " (max. ",
-                                 as.integer(pagination[["totalPages"]]) - 1,
+                                 ifelse(as.integer(pagination[["totalPages"]]) == 0, 0, as.integer(pagination[["totalPages"]]) - 1),
                                  ") with max. ",
                                  pagination[["pageSize"]],
                                  " items (out of a total of ",
