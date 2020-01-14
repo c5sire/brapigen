@@ -27,13 +27,13 @@ brapi_result2df <- function(cont, usedArgs) {
              dat <- read.csv(file = textConnection(cont),
                              stringsAsFactors = FALSE)
              colnames(dat) <- gsub(pattern = "\\.",
-                                   replacement = "|",
+                                   replacement = ":",# or "|",
                                    x = colnames(dat))},
            "tsv" = {
              dat <- read.delim(file = textConnection(cont),
                                stringsAsFactors = FALSE)
              colnames(dat) <- gsub(pattern = "\\.",
-                                   replacement = "|",
+                                   replacement = ":",# or "|",
                                    x = colnames(dat))},
            "flapjack" = {
              dat <- read.delim(file = textConnection(cont),
@@ -109,13 +109,28 @@ brapi_result2df <- function(cont, usedArgs) {
                if (all(sapply(X = detail[[colName]],
                               FUN = inherits,
                               what = "data.frame"))) {
-                 tempDetail <- jointDetail(detail[1, ], colName)
+                 ## Determine rows with non-empty data.frames
+                 nonEmptyDetailRows <- which(lengths(detail[[colName]]) != 0)
+                 ## Create an empty data.frame with columnnames
+                 tempColNames <- names(jointDetail(detail[nonEmptyDetailRows[1], ], colName))
+                 tempDetail <- data.frame(matrix(ncol = length(tempColNames), nrow = 0))
+                 names(tempDetail) <- tempColNames
                  nrows <- nrow(detail)
-                 if (nrows > 1) {
-                   for (i in 2:nrows) {
-                     nextRow <- jointDetail(detail[i, ], colName)
-                     tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
-                     rm(nextRow)
+                 if (nrows >= 1) {
+                   for (i in seq_len(nrows)) {
+                     if (i %in% nonEmptyDetailRows) {
+                       nextRow <- jointDetail(detail[i, ], colName)
+                       tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
+                       rm(nextRow)
+                     } else {# i %in% emptyDetailRows
+                       partRowDetail <- detail[i, -c(which(names(detail) == colName))]
+                       extColNames <- setdiff(names(tempDetail), names(partRowDetail))
+                       partRowExt <- data.frame(matrix(data = NA, nrow = 1, ncol = length(extColNames)))
+                       names(partRowExt) <- extColNames
+                       nextRow <- dplyr::bind_cols(partRowDetail, partRowExt)
+                       tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
+                       rm(partRowDetail, partRowExt, extColNames, nextRow)
+                     }
                    }
                  }
                  tempDetail[[colName]] <- NULL
@@ -197,13 +212,28 @@ brapi_result2df <- function(cont, usedArgs) {
                if (all(sapply(X = detail[[colName]],
                               FUN = inherits,
                               what = "data.frame"))) {
-                 tempDetail <- jointDetail(detail[1, ], colName)
+                 ## Determine rows with non-empty data.frames
+                 nonEmptyDetailRows <- which(lengths(detail[[colName]]) != 0)
+                 ## Create an empty data.frame with columnnames
+                 tempColNames <- names(jointDetail(detail[nonEmptyDetailRows[1], ], colName))
+                 tempDetail <- data.frame(matrix(ncol = length(tempColNames), nrow = 0))
+                 names(tempDetail) <- tempColNames
                  nrows <- nrow(detail)
-                 if (nrows > 1) {
-                   for (i in 2:nrows) {
-                     nextRow <- jointDetail(detail[i, ], colName)
-                     tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
-                     rm(nextRow)
+                 if (nrows >= 1) {
+                   for (i in seq_len(nrows)) {
+                     if (i %in% nonEmptyDetailRows) {
+                       nextRow <- jointDetail(detail[i, ], colName)
+                       tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
+                       rm(nextRow)
+                     } else {# i %in% emptyDetailRows
+                       partRowDetail <- detail[i, -c(which(names(detail) == colName))]
+                       extColNames <- setdiff(names(tempDetail), names(partRowDetail))
+                       partRowExt <- data.frame(matrix(data = NA, nrow = 1, ncol = length(extColNames)))
+                       names(partRowExt) <- extColNames
+                       nextRow <- dplyr::bind_cols(partRowDetail, partRowExt)
+                       tempDetail <- dplyr::bind_rows(tempDetail, nextRow)
+                       rm(partRowDetail, partRowExt, extColNames, nextRow)
+                     }
                    }
                  }
                  tempDetail[[colName]] <- NULL
