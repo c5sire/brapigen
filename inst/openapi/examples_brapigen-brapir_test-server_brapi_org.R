@@ -1,4 +1,4 @@
-## test issues: call 21,
+## test issues: call
 ## test calls: CONTINUE WITH 22
 ## result section: Master
 brapi_get_images_imageDbId(con = con, imageDbId = "img1")
@@ -24,7 +24,7 @@ brapi_get_studies_studyDbId_observationunits(con = con, studyDbId = "1001")#, ob
 brapi_get_studies_studyDbId_table(con = con, studyDbId = "1001")#, format = "csv") # 18
 brapi_get_studytypes(con = con)#, studyTypDbId = "", pageSize = 1000, page = 0) #19
 brapi_get_observationlevels(con = con)#, pageSize = 1000, page = 0) # 20
-brapi_get_observationunits(con = con)#, germplasmDbId = "", observationVariableDbId = "", studyDbId = "", locationDbId = "", trialDbId = "", programDbId = "", seasonDbId = "", observationLevel = "", observationTimeStampRangeStart = "", observationTimeStampRangeEnd = "", pageSize = 1000, page = 0) # 21 ISSUE WITH THE JSON RESPONSE (mailed Peter about it)
+brapi_get_observationunits(con = con)#, germplasmDbId = "", observationVariableDbId = "", studyDbId = "", locationDbId = "", trialDbId = "", programDbId = "", seasonDbId = "", observationLevel = "", observationTimeStampRangeStart = "", observationTimeStampRangeEnd = "", pageSize = 1000, page = 0) # 21
 brapi_get_markers(con = con)
 
 
