@@ -1,8 +1,7 @@
-## test issues: call 22, 23, 39
-## test calls: CONTINUE WITH 41
+## test issues: call 22, 23, 39, 43
+## test calls: CONTINUE WITH
 ## result section: Master
 brapi_get_images_imageDbId(con = con, imageDbId = "img1")
-brapi_get_methods_methodDbId(con = con, methodDbId = "m1")
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
 brapi_get_trials_trialDbId(con = con, trialDbId = "101") # 8
 brapi_get_studies_studyDbId(con = con, studyDbId = "1001") # 12
@@ -31,8 +30,8 @@ brapi_get_studies_studyDbId_table(con = con, studyDbId = "1001")#, format = "csv
 brapi_get_studytypes(con = con)#, studyTypDbId = "", pageSize = 1000, page = 0) #19
 brapi_get_observationlevels(con = con)#, pageSize = 1000, page = 0) # 20
 brapi_get_observationunits(con = con)#, germplasmDbId = "", observationVariableDbId = "", studyDbId = "", locationDbId = "", trialDbId = "", programDbId = "", seasonDbId = "", observationLevel = "", observationTimeStampRangeStart = "", observationTimeStampRangeEnd = "", page = 0, pageSize = 1000) # 21
-brapi_get_search_observationunits_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 22 !ISSUE: not able to generate searchResultsDbId from POST call
-brapi_get_search_observationtables_searchResultsDbId(con = con, searchResultsDbId = "")#, Accept = "application/json", page = 0, pageSize = 1000) # 23 !ISSUE: not able to generate searchResultsDbId from POST call
+brapi_get_search_observationtables_searchResultsDbId(con = con, searchResultsDbId = "")#, Accept = "application/json", page = 0, pageSize = 1000) # 22 !ISSUE: not able to generate searchResultsDbId from POST call
+brapi_get_search_observationunits_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 23 !ISSUE: not able to generate searchResultsDbId from POST call
 brapi_get_methods(con = con)#, page = 0, pageSize = 1000) # 24
 brapi_get_ontologies(con = con)#, page = 0, pageSize = 1000) # 26
 brapi_get_scales(con = con)#, page = 0, pageSize = 1000) # 27
@@ -42,8 +41,17 @@ brapi_get_variables(con = con)#, observationVariableDbId = "", traitClass = "", 
 brapi_get_breedingmethods(con = con)#, page = 0, pageSize = 1000) # 34
 brapi_get_germplasm(con = con)#, germplasmPUI = "", germplasmDbId = "", germplasmName = "", commonCropName = "", page = 0, pageSize = 1000) # 36
 brapi_get_markers(con = con)#, markerDbId = "", markerName = "", includeSynonyms = NA, type = "", page = 0, pageSize = 1000) # 39 ISSUE WITH markerDbId and includeSynonyms parameters
+brapi_get_search_markers_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 41
+brapi_get_allelematrices(con = con, studyDbId = "1001")#, page = 0, pageSize = 1000) # 42
+brapi_get_allelematrices_search(con = con)#, markerProfileDbId = c(""), markerDbId = c(""), matrixDbId = c(""), format = "", expandHomozygotes = NA, unknownString = "", sepPhased = "", sepUnphased = "", page = 0, pageSize = 1000) # 43 ISSUE WITH THE format argument, CONTACTED Peter ABOUT IT! Initially delete the format argument from the call to obtain json response.
+brapi_get_markerprofiles(con = con)#, germplasmDbId = "", studyDbId = "", sampleDbId = "", extractDbId = "", page = 0, pageSize = 1000) # 44
+brapi_get_maps(con = con)#, commonCropName = "", scientificName = "", type = , page = 0, pageSize = 1000) # 46
+brapi_get_maps_mapDbId_positions(con = con, mapDbId = "gm2")#, linkageGroupName = "", page = 0, pageSize = 1000) # 48
+brapi_get_maps_mapDbId_positions_linkageGroupName(con = con, mapDbId = "gm2", linkageGroupName = "3")#, min = , max = , page = 0, pageSize = 1000) # 49
 
 ## result section: Master/Detail
 brapi_get_studies_studyDbId_germplasm(con = con, studyDbId = "1001")#, pageSize = 1000, page = 0) # 13
 brapi_get_studies_studyDbId_observationvariables(con = con, studyDbId = "1001")#, pageSize = 1000, page = 0) # 17
 brapi_get_germplasm_germplasmDbId_attributes(con = con, germplasmDbId = "1")#, attributeDbIds = c("ATT01", "ATT05"), page = 0, pageSize = 1000) # 38
+brapi_get_markerprofiles_markerProfileDbId(con = con, markerProfileDbId = "P1")#, expandHomozygotes = NA, unknownString = "", sepPhased = "", sepUnphased = "", page = 0, pageSize = 1000) # 45
+brapi_get_maps_mapDbId(con = con, mapDbId = "gm2")#, page = 0, pageSize = 1000) # 47
