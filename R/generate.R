@@ -193,7 +193,7 @@ aCallParamString <- function(aCall) {
         res <- paste(res,
                      paste(p[["name"]],
                            "=",
-                           0),
+                           as.integer(NA)),
                      sep = ", ")
         next()
       }
@@ -201,7 +201,7 @@ aCallParamString <- function(aCall) {
         res <- paste(res,
                      paste(p[["name"]],
                            "=",
-                           0),
+                           as.integer(NA)),
                      sep = ", ")
         next()
       }

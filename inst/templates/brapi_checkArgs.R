@@ -106,7 +106,7 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
         if (i == "pageSize" && usedArgs[[i]] < 1) {
           stop('Argument: "', i, '" should be > 0.')
         }
-        if ((i == "min" | i == "max") && usedArgs[[i]] < 0) {
+        if ((i == "min" | i == "max") && ifelse(is.na(usedArgs[[i]]), FALSE, usedArgs[[i]] < 0)) {
           stop('Argument: "', i, '" should be >= 0.')
         }
         if (i == "page" | i == "pageSize") {
@@ -130,8 +130,10 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
     }
     ## Check when both min and max are present in used arguments that
     ## min is smaller than or equal to max
-    if ((all(c("min", "max") %in% names(usedArgs))) && (!usedArgs[["min"]] <= usedArgs[["max"]])) {
-      stop('Argument: "min" can never be larger than argument: "max".')
+    if (!is.na(usedArgs[["min"]]) && !is.na(usedArgs[["max"]])) {
+      if ((all(c("min", "max") %in% names(usedArgs))) && (!usedArgs[["min"]] <= usedArgs[["max"]])) {
+        stop('Argument: "min" can never be larger than argument: "max".')
+      }
     }
   }
 }
