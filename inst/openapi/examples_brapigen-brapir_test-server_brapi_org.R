@@ -1,5 +1,5 @@
 ## test issues: call 22, 23, 39, 43
-## test calls: CONTINUE WITH
+## test calls: CONTINUE WITH 57
 ## result section: Master
 brapi_get_images_imageDbId(con = con, imageDbId = "img1")
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
@@ -12,6 +12,8 @@ brapi_get_variables_observationVariableDbId(con = con, observationVariableDbId =
 brapi_get_breedingmethods_breedingMethodDbId(con = con, breedingMethodDbId = "bm1") # 35
 brapi_get_germplasm_germplasmDbId(con = con, germplasmDbId = "1") # 37
 brapi_get_markers_markerDbId(con = con, markerDbId = "mr01") # 40
+brapi_get_samples_sampleDbId(con = con, sampleDbId = "sam01") # 51
+brapi_get_vendor_orders_orderId_status(con = con, orderId = "vo1") # 56
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
@@ -48,6 +50,11 @@ brapi_get_markerprofiles(con = con)#, germplasmDbId = "", studyDbId = "", sample
 brapi_get_maps(con = con)#, commonCropName = "", scientificName = "", type = , page = 0, pageSize = 1000) # 46
 brapi_get_maps_mapDbId_positions(con = con, mapDbId = "gm2")#, linkageGroupName = "", page = 0, pageSize = 1000) # 48
 brapi_get_maps_mapDbId_positions_linkageGroupName(con = con, mapDbId = "gm2", linkageGroupName = "3")#, min = , max = , page = 0, pageSize = 1000) # 49
+brapi_get_samples(con = con)#, sampleDbId = "", observationUnitDbId = "", plateDbId = "", germplasmDbId = "", page = 0, pageSize = 1000) # 50
+brapi_get_search_samples_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 4) # 52
+brapi_get_vendor_orders(con = con)#, orderId = ""), submissionId = "") # 53
+brapi_get_vendor_orders_orderId_plates(con = con, orderId = "vo1") # 54
+brapi_get_vendor_orders_orderId_results(con = con, orderId = "vo1") # 55
 
 ## result section: Master/Detail
 brapi_get_studies_studyDbId_germplasm(con = con, studyDbId = "1001")#, pageSize = 1000, page = 0) # 13
