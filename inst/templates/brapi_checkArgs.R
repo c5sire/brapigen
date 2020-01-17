@@ -130,7 +130,7 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
     }
     ## Check when both min and max are present in used arguments that
     ## min is smaller than or equal to max
-    if (!is.na(usedArgs[["min"]]) && !is.na(usedArgs[["max"]])) {
+    if (ifelse(all(c("min", "max") %in% names(usedArgs)), (!is.na(usedArgs[["min"]]) && !is.na(usedArgs[["max"]])), FALSE)) {
       if ((all(c("min", "max") %in% names(usedArgs))) && (!usedArgs[["min"]] <= usedArgs[["max"]])) {
         stop('Argument: "min" can never be larger than argument: "max".')
       }
