@@ -1,5 +1,5 @@
-## test issues: call 22, 23, 39, 43
-## test calls: CONTINUE WITH 57
+## test issues: call 22, 23, 39, 43, 57, 58
+## test calls: CONTINUE WITH 58
 ## result section: Master
 brapi_get_images_imageDbId(con = con, imageDbId = "img1")
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
@@ -14,6 +14,8 @@ brapi_get_germplasm_germplasmDbId(con = con, germplasmDbId = "1") # 37
 brapi_get_markers_markerDbId(con = con, markerDbId = "mr01") # 40
 brapi_get_samples_sampleDbId(con = con, sampleDbId = "sam01") # 51
 brapi_get_vendor_orders_orderId_status(con = con, orderId = "vo1") # 56
+brapi_get_vendor_plates_submissionId(con = con, submissionId = "") # 57 MANUALLY ADDED DESCRIPTION OF submissionId as: The submissionId returned by the vendor, when a set of plates was successfully submitted. It is obtained from the response of "POST /vendor/plates" call. UNTESTED NO KNOWN VALUE FOR submissionID!
+brapi_get_vendor_specifications(con = con) # 58 MANUALLY ADAPTED function arguments! ERROR WITH OUTPUT!
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
@@ -55,6 +57,7 @@ brapi_get_search_samples_searchResultsDbId(con = con, searchResultsDbId = "")#, 
 brapi_get_vendor_orders(con = con)#, orderId = ""), submissionId = "") # 53
 brapi_get_vendor_orders_orderId_plates(con = con, orderId = "vo1") # 54
 brapi_get_vendor_orders_orderId_results(con = con, orderId = "vo1") # 55
+brapi_get_lists(con = con)#, listType = "", listName = "", listDbId = "", listSource = "", page = 0, pageSize = 1000) # 59
 
 ## result section: Master/Detail
 brapi_get_studies_studyDbId_germplasm(con = con, studyDbId = "1001")#, pageSize = 1000, page = 0) # 13
@@ -62,3 +65,4 @@ brapi_get_studies_studyDbId_observationvariables(con = con, studyDbId = "1001")#
 brapi_get_germplasm_germplasmDbId_attributes(con = con, germplasmDbId = "1")#, attributeDbIds = c("ATT01", "ATT05"), page = 0, pageSize = 1000) # 38
 brapi_get_markerprofiles_markerProfileDbId(con = con, markerProfileDbId = "P1")#, expandHomozygotes = NA, unknownString = "", sepPhased = "", sepUnphased = "", page = 0, pageSize = 1000) # 45
 brapi_get_maps_mapDbId(con = con, mapDbId = "gm2")#, page = 0, pageSize = 1000) # 47
+brapi# 60
