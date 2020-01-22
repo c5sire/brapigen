@@ -1,4 +1,4 @@
-## test issues: call 22, 39, 43, 58
+## test issues: call 18 & 22, 58
 ## test calls: CONTINUE WITH 58
 ## result section: Master
 brapi_get_images_imageDbId(con = con, imageDbId = "img1")
@@ -30,11 +30,11 @@ brapi_get_studies(con = con)#, commonCropName = "", studyTypeDbId = "", programD
 brapi_get_studies_studyDbId_layouts(con = con, studyDbId = "1001")#, pageSize = 1000, page = 0) # 14
 brapi_get_studies_studyDbId_observations(con = con, studyDbId = "1001")# , observationVariableDbIds = '', page = 0, pageSize = 1000) # 15
 brapi_get_studies_studyDbId_observationunits(con = con, studyDbId = "1001")#, observationLevel = "", pageSize = 1000, page = 0) # 16
-brapi_get_studies_studyDbId_table(con = con, studyDbId = "1001")#, format = "csv") # 18
+brapi_get_studies_studyDbId_table(con = con, studyDbId = "1001")#, format = "") # 18 !ISSUE: headerRow in master!
 brapi_get_studytypes(con = con)#, studyTypDbId = "", pageSize = 1000, page = 0) #19
 brapi_get_observationlevels(con = con)#, pageSize = 1000, page = 0) # 20
 brapi_get_observationunits(con = con)#, germplasmDbId = "", observationVariableDbId = "", studyDbId = "", locationDbId = "", trialDbId = "", programDbId = "", seasonDbId = "", observationLevel = "", observationTimeStampRangeStart = "", observationTimeStampRangeEnd = "", page = 0, pageSize = 1000) # 21
-brapi_get_search_observationtables_searchResultsDbId(con = con, searchResultsDbId = "3deedeeb-9bc2-4c87-bac9-516655e6ef1b")#, Accept = "application/json", page = 0, pageSize = 1000) # 22 !ISSUE: not able to generate searchResultsDbId from POST call
+brapi_get_search_observationtables_searchResultsDbId(con = con, searchResultsDbId = "")#, Accept = "application/json", page = 0, pageSize = 1000) # 22 !ISSUE: headerRow in master!
 brapi_get_search_observationunits_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 23
 brapi_get_methods(con = con)#, page = 0, pageSize = 1000) # 24
 brapi_get_ontologies(con = con)#, page = 0, pageSize = 1000) # 26
@@ -44,7 +44,7 @@ brapi_get_traits(con = con)#, page = 0, pageSize = 1000) # 30
 brapi_get_variables(con = con)#, observationVariableDbId = "", traitClass = "", page = 0, pageSize = 1000) # 32
 brapi_get_breedingmethods(con = con)#, page = 0, pageSize = 1000) # 34
 brapi_get_germplasm(con = con)#, germplasmPUI = "", germplasmDbId = "", germplasmName = "", commonCropName = "", page = 0, pageSize = 1000) # 36
-brapi_get_markers(con = con)#, markerDbId = "", markerName = "", includeSynonyms = NA, type = "", page = 0, pageSize = 1000) # 39 ISSUE WITH markerDbId and includeSynonyms parameters
+brapi_get_markers(con = con)#, markerDbId = "", markerName = "", includeSynonyms = NA, type = "", page = 0, pageSize = 1000) # 39
 brapi_get_search_markers_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 41
 brapi_get_allelematrices(con = con, studyDbId = "1001")#, page = 0, pageSize = 1000) # 42
 brapi_get_allelematrices_search(con = con)#, markerProfileDbId = c(""), markerDbId = c(""), matrixDbId = c(""), format = "", expandHomozygotes = NA, unknownString = "", sepPhased = "", sepUnphased = "", page = 0, pageSize = 1000) # 43 Changed to _search!
