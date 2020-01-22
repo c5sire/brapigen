@@ -49,7 +49,8 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
                                        "application/flapjack"))},
              "format" = {
                brapi_matchArg(arg = usedArgs[[i]],
-                          choices =  c("csv",
+                          choices =  c(as.character(NA),
+                                       "csv",
                                        "tsv",
                                        "flapjack"))},
              "listType" = {
