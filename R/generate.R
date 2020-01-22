@@ -118,8 +118,8 @@ aCallParamVector <- function(aCall) {
                                                 "; required: ",
                                                 p[["required"]], "; ",
                                                 p[["description"]], "; ",
-                                                'default: "csv",',
-                                                ' other possible values: "tsv" and depending on the call "flapjack" may be supported.'))},
+                                                'default: as.character(NA),',
+                                                ' other possible values: "csv", tsv" and depending on the call "flapjack" may be supported.'))},
                "includeSiblings" = {res <- c(res, paste0(p[["name"]], " ",
                                                          "logical",
                                                          "; required: ",
@@ -185,7 +185,7 @@ aCallParamString <- function(aCall) {
         res <- paste(res,
                      paste(p[["name"]],
                            "=",
-                           "'csv'"),
+                           "as.character(NA)"),
                      sep = ", ")
         next()
       }
@@ -193,7 +193,7 @@ aCallParamString <- function(aCall) {
         res <- paste(res,
                      paste(p[["name"]],
                            "=",
-                           as.integer(NA)),
+                           "as.integer(NA)"),
                      sep = ", ")
         next()
       }
@@ -201,7 +201,7 @@ aCallParamString <- function(aCall) {
         res <- paste(res,
                      paste(p[["name"]],
                            "=",
-                           as.integer(NA)),
+                           "as.integer(NA)"),
                      sep = ", ")
         next()
       }
