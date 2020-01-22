@@ -4,7 +4,12 @@ brapi_GET <- function(url, usedArgs) {
   brapi_message(msg = paste0("Waiting for response from server: ...\n"))
 
   if ("format" %in% names(usedArgs)) {
+    if (is.na(usedArgs[["format"]])) {
+      usedArgs[["format"]] <- "NA"
+    }
     switch(usedArgs[["format"]],
+           "NA" = {
+             usedArgs[["Accept"]] <- "application/json"},
            "csv" = {
              usedArgs[["Accept"]] <- "text/csv"},
            "tsv" = {
