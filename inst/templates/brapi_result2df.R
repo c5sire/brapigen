@@ -19,6 +19,9 @@ brapi_result2df <- function(cont, usedArgs) {
     df <- jsonlite::flatten(df)
     return(df)
   }
+  if ("format" %in% names(usedArgs) && is.na(usedArgs[["format"]])) {
+    usedArgs[["format"]] <- NULL
+  }
   ## Process result to data.frame
   if ("format" %in% names(usedArgs)) {
     ## three possibilities "csv", "tsv" and "flapjack"
