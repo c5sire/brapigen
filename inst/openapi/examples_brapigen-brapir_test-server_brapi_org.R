@@ -1,4 +1,4 @@
-## test issues: call 22, 23, 39, 43, 57, 58
+## test issues: call 22, 39, 43, 58
 ## test calls: CONTINUE WITH 58
 ## result section: Master
 brapi_get_images_imageDbId(con = con, imageDbId = "img1")
@@ -14,7 +14,7 @@ brapi_get_germplasm_germplasmDbId(con = con, germplasmDbId = "1") # 37
 brapi_get_markers_markerDbId(con = con, markerDbId = "mr01") # 40
 brapi_get_samples_sampleDbId(con = con, sampleDbId = "sam01") # 51
 brapi_get_vendor_orders_orderId_status(con = con, orderId = "vo1") # 56
-brapi_get_vendor_plates_submissionId(con = con, submissionId = "") # 57 MANUALLY ADDED DESCRIPTION OF submissionId as: The submissionId returned by the vendor, when a set of plates was successfully submitted. It is obtained from the response of "POST /vendor/plates" call. UNTESTED NO KNOWN VALUE FOR submissionID!
+brapi_get_vendor_plates_submissionId(con = con, submissionId = "ps1") # 57 MANUALLY ADDED DESCRIPTION OF submissionId as: The submissionId returned by the vendor, when a set of plates was successfully submitted. It is obtained from the response of "POST /vendor/plates" call.
 brapi_get_vendor_specifications(con = con) # 58 MANUALLY ADAPTED function arguments! ERROR WITH OUTPUT!
 
 ## result section: Detail
@@ -34,8 +34,8 @@ brapi_get_studies_studyDbId_table(con = con, studyDbId = "1001")#, format = "csv
 brapi_get_studytypes(con = con)#, studyTypDbId = "", pageSize = 1000, page = 0) #19
 brapi_get_observationlevels(con = con)#, pageSize = 1000, page = 0) # 20
 brapi_get_observationunits(con = con)#, germplasmDbId = "", observationVariableDbId = "", studyDbId = "", locationDbId = "", trialDbId = "", programDbId = "", seasonDbId = "", observationLevel = "", observationTimeStampRangeStart = "", observationTimeStampRangeEnd = "", page = 0, pageSize = 1000) # 21
-brapi_get_search_observationtables_searchResultsDbId(con = con, searchResultsDbId = "")#, Accept = "application/json", page = 0, pageSize = 1000) # 22 !ISSUE: not able to generate searchResultsDbId from POST call
-brapi_get_search_observationunits_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 23 !ISSUE: not able to generate searchResultsDbId from POST call
+brapi_get_search_observationtables_searchResultsDbId(con = con, searchResultsDbId = "3deedeeb-9bc2-4c87-bac9-516655e6ef1b")#, Accept = "application/json", page = 0, pageSize = 1000) # 22 !ISSUE: not able to generate searchResultsDbId from POST call
+brapi_get_search_observationunits_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 23
 brapi_get_methods(con = con)#, page = 0, pageSize = 1000) # 24
 brapi_get_ontologies(con = con)#, page = 0, pageSize = 1000) # 26
 brapi_get_scales(con = con)#, page = 0, pageSize = 1000) # 27
@@ -47,7 +47,7 @@ brapi_get_germplasm(con = con)#, germplasmPUI = "", germplasmDbId = "", germplas
 brapi_get_markers(con = con)#, markerDbId = "", markerName = "", includeSynonyms = NA, type = "", page = 0, pageSize = 1000) # 39 ISSUE WITH markerDbId and includeSynonyms parameters
 brapi_get_search_markers_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 41
 brapi_get_allelematrices(con = con, studyDbId = "1001")#, page = 0, pageSize = 1000) # 42
-brapi_get_allelematrices_search(con = con)#, markerProfileDbId = c(""), markerDbId = c(""), matrixDbId = c(""), format = "", expandHomozygotes = NA, unknownString = "", sepPhased = "", sepUnphased = "", page = 0, pageSize = 1000) # 43 ISSUE WITH THE format argument, CONTACTED Peter ABOUT IT! Initially delete the format argument from the call to obtain json response.
+brapi_get_allelematrices_search(con = con)#, markerProfileDbId = c(""), markerDbId = c(""), matrixDbId = c(""), format = "", expandHomozygotes = NA, unknownString = "", sepPhased = "", sepUnphased = "", page = 0, pageSize = 1000) # 43 Changed to _search!
 brapi_get_markerprofiles(con = con)#, germplasmDbId = "", studyDbId = "", sampleDbId = "", extractDbId = "", page = 0, pageSize = 1000) # 44
 brapi_get_maps(con = con)#, commonCropName = "", scientificName = "", type = , page = 0, pageSize = 1000) # 46
 brapi_get_maps_mapDbId_positions(con = con, mapDbId = "gm2")#, linkageGroupName = "", page = 0, pageSize = 1000) # 48
