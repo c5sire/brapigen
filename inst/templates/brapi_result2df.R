@@ -87,7 +87,7 @@ brapi_result2df <- function(cont, usedArgs) {
                         },
                         "list" = {
                           templist <- as.list(data.frame(t(as.matrix(unlist(as.relistable(resultList[[l1name]])))),
-                                                             stringsAsFactors = FALSE))
+                                                         stringsAsFactors = FALSE))
                           names(templist) <- paste(l1name, names(templist), sep = ".")
                           tempmaster <- c(tempmaster, templist)
                         })
@@ -172,35 +172,46 @@ brapi_result2df <- function(cont, usedArgs) {
            "master/detail" = {##headerRow! e.g. /search/observationtables/{searchResultsDbId}
              ## Process master part
              masterList <- resultList[!names(resultList) %in% "data"]
-             if (!all(lengths(masterList) <= 1)) {
-               master <- masterList[lengths(masterList) == 1]
-               tempmaster <- list()
-               for (l1name in names(which(lengths(masterList) > 1))) {
-                 switch(class(masterList[[l1name]]),
-                        "character" = {
-                          tempmaster[[l1name]] <- paste(masterList[[l1name]],
-                                                        collapse = ", ")
-                        },
-                        "data.frame" = {
-                          for (i in seq_len(nrow(masterList[[l1name]]))) {
-                            for (j in seq_along(masterList[[l1name]])) {
-                              tempmaster[[paste(l1name,
-                                                colnames(masterList[[l1name]][j]),
-                                                i,
-                                                sep = ".")]] <- masterList[[l1name]][i, j]
-                            }
-                          }
-                        },
-                        "list" = {
-                          templist <- as.list(data.frame(t(as.matrix(unlist(as.relistable(masterList[[l1name]])))),
-                                                         stringsAsFactors = FALSE))
-                          names(templist) <- paste(l1name, names(templist), sep = ".")
-                          tempmaster <- c(tempmaster, templist)
-                        })
-               }
-               master <- c(master, tempmaster)
+             if (all(c("headerRow", "observationVariableDbIds", "observationVariableNames") %in% names(masterList))) {
+               headerRow <- c(masterList[["headerRow"]],
+                              paste(masterList[["observationVariableNames"]],
+                                    masterList[["observationVariableDbIds"]],
+                                    sep = "|"))
              } else {
-               master <-  masterList[lengths(masterList) == 1]
+               if (!all(lengths(masterList) <= 1)) {
+                 master <- masterList[lengths(masterList) == 1]
+                 tempmaster <- list()
+                 for (l1name in names(which(lengths(masterList) > 1))) {
+                   switch(class(masterList[[l1name]]),
+                          "character" = {
+                            tempmaster[[l1name]] <- paste(masterList[[l1name]],
+                                                          collapse = ", ")
+                          },
+                          "data.frame" = {
+                            for (i in seq_len(nrow(masterList[[l1name]]))) {
+                              for (j in seq_along(masterList[[l1name]])) {
+                                tempmaster[[paste(l1name,
+                                                  colnames(masterList[[l1name]][j]),
+                                                  i,
+                                                  sep = ".")]] <- masterList[[l1name]][i, j]
+                              }
+                            }
+                          },
+                          "list" = {
+                            templist <- as.list(data.frame(t(as.matrix(unlist(as.relistable(masterList[[l1name]])))),
+                                                           stringsAsFactors = FALSE))
+                            names(templist) <- paste(l1name, names(templist), sep = ".")
+                            tempmaster <- c(tempmaster, templist)
+                          })
+                 }
+                 if (length(master) == 0) {
+                   master <- tempmaster
+                 } else {
+                   master <- c(master, tempmaster)
+                 }
+               } else {
+                 master <-  masterList[lengths(masterList) == 1]
+               }
              }
              ## Process detail part
              if (inherits(resultList[["data"]], what = "data.frame")) {
@@ -211,9 +222,14 @@ brapi_result2df <- function(cont, usedArgs) {
                detail <- as.data.frame(x = resultList[["data"]],
                                        stringsAsFactors = FALSE)
              }
-             namesListCols <- names(which(sapply(X = detail,
-                                                 FUN = inherits,
-                                                 what = "list")))
+             if (exists("headerRow")) {
+               colnames(detail) <- headerRow
+               namesListCols <- names(detail)
+             } else {
+               namesListCols <- names(which(sapply(X = detail,
+                                                   FUN = inherits,
+                                                   what = "list")))
+             }
              for (colName in namesListCols) {
                ## list of data.frame
                if (all(sapply(X = detail[[colName]],
@@ -271,7 +287,11 @@ brapi_result2df <- function(cont, usedArgs) {
                  rm(tempDetail)
                }
              }
-             dat <- cbind(as.data.frame(master, stringsAsFactors = FALSE), detail)
+             if (exists("headerRow")) {
+               dat <- detail
+             } else {
+               dat <- cbind(as.data.frame(master, stringsAsFactors = FALSE), detail)
+             }
            })
   }
   return(dat)
