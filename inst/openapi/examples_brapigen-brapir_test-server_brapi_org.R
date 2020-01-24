@@ -1,5 +1,5 @@
-## test issues: call 18 & 22, 58
-## test calls: CONTINUE WITH 58
+## test issues: call 18 & 22, 65
+## tested calls: GET 72,
 ## result section: Master
 brapi_get_images_imageDbId(con = con, imageDbId = "img1")
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
