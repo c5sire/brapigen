@@ -1,7 +1,5 @@
-## test issues: call 18 & 22
 ## tested calls: GET 72,
 ## result section: Master
-brapi_get_images_imageDbId(con = con, imageDbId = "img1")
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
 brapi_get_trials_trialDbId(con = con, trialDbId = "101") # 8
 brapi_get_studies_studyDbId(con = con, studyDbId = "1001") # 12
@@ -36,11 +34,11 @@ brapi_get_studies(con = con)#, commonCropName = "", studyTypeDbId = "", programD
 brapi_get_studies_studyDbId_layouts(con = con, studyDbId = "1001")#, pageSize = 1000, page = 0) # 14
 brapi_get_studies_studyDbId_observations(con = con, studyDbId = "1001")# , observationVariableDbIds = '', page = 0, pageSize = 1000) # 15
 brapi_get_studies_studyDbId_observationunits(con = con, studyDbId = "1001")#, observationLevel = "", pageSize = 1000, page = 0) # 16
-brapi_get_studies_studyDbId_table(con = con, studyDbId = "1001")#, format = "") # 18 !ISSUE: headerRow in master!
+brapi_get_studies_studyDbId_table(con = con, studyDbId = "1001")#, format = "") # 18
 brapi_get_studytypes(con = con)#, studyTypDbId = "", pageSize = 1000, page = 0) #19
 brapi_get_observationlevels(con = con)#, pageSize = 1000, page = 0) # 20
 brapi_get_observationunits(con = con)#, germplasmDbId = "", observationVariableDbId = "", studyDbId = "", locationDbId = "", trialDbId = "", programDbId = "", seasonDbId = "", observationLevel = "", observationTimeStampRangeStart = "", observationTimeStampRangeEnd = "", page = 0, pageSize = 1000) # 21
-brapi_get_search_observationtables_searchResultsDbId(con = con, searchResultsDbId = "")#, Accept = "application/json", page = 0, pageSize = 1000) # 22 !ISSUE: headerRow in master!
+brapi_get_search_observationtables_searchResultsDbId(con = con, searchResultsDbId = "")#, Accept = "application/json", page = 0, pageSize = 1000) # 22
 brapi_get_search_observationunits_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 23
 brapi_get_methods(con = con)#, page = 0, pageSize = 1000) # 24
 brapi_get_ontologies(con = con)#, page = 0, pageSize = 1000) # 26
