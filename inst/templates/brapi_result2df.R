@@ -92,7 +92,11 @@ brapi_result2df <- function(cont, usedArgs) {
                           tempmaster <- c(tempmaster, templist)
                         })
                }
-               dat <- cbind(master, as.data.frame(tempmaster, stringsAsFactors = FALSE))
+               if (length(master) == 0) {
+                 dat <- as.data.frame(tempmaster, stringsAsFactors = FALSE)
+               } else {
+                 dat <- cbind(master, as.data.frame(tempmaster, stringsAsFactors = FALSE))
+               }
              }
            },
            "detail" = {
