@@ -1,4 +1,4 @@
-## test issues: call 18 & 22, 65
+## test issues: call 18 & 22
 ## tested calls: GET 72,
 ## result section: Master
 brapi_get_images_imageDbId(con = con, imageDbId = "img1")
@@ -19,7 +19,7 @@ brapi_get_markers_markerDbId(con = con, markerDbId = "mr01") # 47
 brapi_get_samples_sampleDbId(con = con, sampleDbId = "sam01") # 58
 brapi_get_vendor_orders_orderId_status(con = con, orderId = "vo1") # 63
 brapi_get_vendor_plates_submissionId(con = con, submissionId = "ps1") # 64 MANUALLY ADDED DESCRIPTION OF submissionId as: The submissionId returned by the vendor, when a set of plates was successfully submitted. It is obtained from the response of "POST /vendor/plates" call.
-brapi_get_vendor_specifications(con = con) # 65 MANUALLY ADAPTED function arguments! ERROR WITH OUTPUT!
+brapi_get_vendor_specifications(con = con) # 65 MANUALLY ADAPTED function arguments!
 brapi_get_images_imageDbId(con = con, imageDbId = "img1") # 69
 brapi_get_people_personDbId(con = con, personDbId = "person1") # 72
 
