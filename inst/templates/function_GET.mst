@@ -1,5 +1,5 @@
 #' @title
-#' brapi_{{verb}}_{{name}}
+#' {{verb}} {{call}}
 #'
 #' @description
 #' {{summary}}
