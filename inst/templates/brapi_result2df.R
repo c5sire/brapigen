@@ -1,5 +1,6 @@
 ### Internal function for parsing the result part of the response content into
 ### a flattened data.frame object
+#' @importFrom utils as.relistable read.csv read.delim
 brapi_result2df <- function(cont, usedArgs) {
   ## Helper functions
   jointDetail <- function(detailDat, colName) {
