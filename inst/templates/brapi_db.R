@@ -14,9 +14,9 @@
 #'
 #' @author brapir generator package
 #'
-#' @example
-#'
 #' @family brapiutils
+#'
+#' @importFrom magrittr `%>%`
 #'
 #' @export
 brapi_db <- function() {
