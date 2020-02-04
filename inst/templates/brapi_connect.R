@@ -26,8 +26,6 @@
 #'
 #' @author brapir generator package
 #'
-#' @example
-#'
 #' @return An BrAPI compliant database connection object of class brapi_db.
 #'
 #' @family brapiutils

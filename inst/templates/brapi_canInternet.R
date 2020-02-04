@@ -14,9 +14,8 @@
 #'
 #' @family brapiutils
 #'
-#' @example
-#'
 #' @importFrom curl nslookup
+#'
 #' @export
 brapi_canInternet <- function(url = "www.google.org") {
   stopifnot(is.character(url))

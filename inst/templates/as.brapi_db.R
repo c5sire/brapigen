@@ -23,8 +23,6 @@
 #'
 #' @author brapir generator package
 #'
-#' @example
-#'
 #' @family brapiutils
 #'
 #' @export

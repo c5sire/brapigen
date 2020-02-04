@@ -17,8 +17,6 @@
 #'
 #' @family brapiutils
 #'
-#' @example
-#'
 #' @export
 brapi_checkCon <- function(con = NULL, verbose = TRUE, brapi_calls = "any") {
   base::stopifnot(is.brapi_con(con))
