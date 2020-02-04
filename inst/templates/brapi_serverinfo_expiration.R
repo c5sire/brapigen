@@ -10,7 +10,7 @@
 #' library(brapir)
 #'
 #' if (interactive()) {
-#'   con <- ba_db()$testserver
+#'   con <- brapi_db()$testserver
 #'   brapi_serverinfo_expiration(con)
 #' }
 #'
