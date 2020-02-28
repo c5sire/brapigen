@@ -1,5 +1,5 @@
 #' @title
-#' {{verb}} {{call}}
+#' {{verb}} {{titleCall}}
 #'
 #' @description
 #' {{summary}}
@@ -15,7 +15,7 @@
 #'
 #' @author brapir generator package
 #'
-#' @references \href{https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/{{version}}#/{{tag}}/{{verb}}_{{name}} }{SwaggerHub}
+#' @references [BrAPI SwaggerHub]({https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/{{version}}#/{{tag}}/{{verb}}_{{callRefURL}} )
 #'
 {{#family}}
 #' @family {{fname}}
@@ -32,15 +32,16 @@ brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
   ## Check validity of used and required arguments
   brapi_checkArgs(usedArgs, reqArgs = "{{required}}")
   ## Obtain the call url
-  callurl <- brapi_GET_callURL(usedArgs = usedArgs,
+  callurl <- brapi_POST_callURL(usedArgs = usedArgs,
                                callPath = "{{call}}",
                                reqArgs = "{{required}}",
                                packageName = "{{package}}",
                                callVersion = {{version}})
+  ## Build the Body
 
   try({
     ## Make the call and receive the response
-    resp <- brapi_GET(url = callurl, usedArgs = usedArgs)
+    resp <- brapi_POST(url = callurl, usedArgs = usedArgs)
     ## Extract the content from the response object in human readable form
     cont <- httr::content(x = resp, as = "text", encoding = "UTF-8")
     ## Convert the content object into a data.frame
