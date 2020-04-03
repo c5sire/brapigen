@@ -33,15 +33,16 @@ brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
   brapi_checkArgs(usedArgs, reqArgs = "{{required}}")
   ## Obtain the call url
   callurl <- brapi_POST_callURL(usedArgs = usedArgs,
-                               callPath = "{{call}}",
-                               reqArgs = "{{required}}",
-                               packageName = "{{package}}",
-                               callVersion = {{version}})
+                                callPath = "{{call}}",
+                                reqArgs = "{{required}}",
+                                packageName = "{{package}}",
+                                callVersion = {{version}})
   ## Build the Body
-
+  callbody <- brapi_POST_callBody(usedArgs = usedArgs,
+                                  reqArgs = "{{required}}")
   try({
     ## Make the call and receive the response
-    resp <- brapi_POST(url = callurl, usedArgs = usedArgs)
+    resp <- brapi_POST(url = callurl, body = callbody, usedArgs = usedArgs)
     ## Extract the content from the response object in human readable form
     cont <- httr::content(x = resp, as = "text", encoding = "UTF-8")
     ## Convert the content object into a data.frame
