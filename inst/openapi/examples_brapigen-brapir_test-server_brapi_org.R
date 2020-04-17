@@ -1,4 +1,4 @@
-## tested calls: GET 72,
+## tested calls: GET 72, POST 2
 ## result section: Master
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
 brapi_get_trials_trialDbId(con = con, trialDbId = "101") # 8
@@ -20,6 +20,8 @@ brapi_get_vendor_plates_submissionId(con = con, submissionId = "ps1") # 64 MANUA
 brapi_get_vendor_specifications(con = con) # 65 MANUALLY ADAPTED function arguments!
 brapi_get_images_imageDbId(con = con, imageDbId = "img1") # 69
 brapi_get_people_personDbId(con = con, personDbId = "person1") # 72
+brapi_post_search_programs(con = con)#, abbreviations = "", commonCropNames = "", leadPersonDbIds = "", leadPersonNames = "", objectives = "", page = 0, pageSize = 1000, programDbIds = , programNames = "") # 73
+brapi_post_search_studies(con = con)#, active = NA, commonCropNames = "", germplasmDbIds = "", locationDbIds = "", observationVariableDbIds = "", page = 0, pageSize = 1000, programDbIds = "", programNames = "", seasonDbIds = "", sortBy = "", sortOrder = "", studyDbIds = "", studyNames = "", studyTypeDbIds = "", studyTypeNames = "", trialDbIds = "") # 74
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
