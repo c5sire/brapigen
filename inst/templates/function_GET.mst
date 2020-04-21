@@ -15,7 +15,7 @@
 #'
 #' @author brapir generator package
 #'
-#' @references [BrAPI SwaggerHub]({https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/{{version}}#/{{tag}}/{{verb}}_{{callRefURL}} )
+#' @references \href{https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/{{version}}#/{{tag}}/{{verb}}_{{callRefURL}} }{BrAPI SwaggerHub}
 #'
 {{#family}}
 #' @family {{fname}}
