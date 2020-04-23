@@ -27,6 +27,7 @@ brapi_post_search_observationunits(con = con)#, germplasmDbIds = '', locationDbI
 brapi_post_search_variables(con = con)#, dataTypes = '', methodDbIds = '', observationVariableDbIds = '', observationVariableNames = '', observationVariableXrefs = '', ontologyDbIds = '', page = 0, pageSize = 1000, scaleDbIds = '', scaleXrefs = '', traitClasses = '', traitDbIds = '', traitXrefs = '') # 77
 brapi_post_search_germplasm(con = con)#, accessionNumbers = '', commonCropNames = '', germplasmDbIds = '', germplasmGenus = '', germplasmNames = '', germplasmPUIs = '', germplasmSpecies = '', page = 0, pageSize = 1000) # 78
 brapi_post_search_markers(con = con)#, includeSynonyms = NA, markerDbIds = '', markerNames = '', matchMethod = '', page = 0, pageSize = 1000, types = '') # 79
+brapi_post_allelematrices_search(con = con)#, expandHomozygotes = NA, format = as.character(NA), markerDbId = '', markerProfileDbId = '', matrixDbId = '', page = 0, pageSize = 1000, sepPhased = '', sepUnphased = '', unknownString = '') # 80
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
