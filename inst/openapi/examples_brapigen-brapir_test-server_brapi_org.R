@@ -1,4 +1,4 @@
-## tested calls: GET 72, POST 4
+## tested calls: GET 72, POST 10
 ## result section: Master
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
 brapi_get_trials_trialDbId(con = con, trialDbId = "101") # 8
@@ -29,6 +29,7 @@ brapi_post_search_germplasm(con = con)#, accessionNumbers = '', commonCropNames 
 brapi_post_search_markers(con = con)#, includeSynonyms = NA, markerDbIds = '', markerNames = '', matchMethod = '', page = 0, pageSize = 1000, types = '') # 79
 brapi_post_allelematrices_search(con = con)#, expandHomozygotes = NA, format = as.character(NA), markerDbId = '', markerProfileDbId = '', matrixDbId = '', page = 0, pageSize = 1000, sepPhased = '', sepUnphased = '', unknownString = '') # 80
 brapi_post_search_samples(con = con)#, germplasmDbIds = '', observationUnitDbIds = '', page = 0, pageSize = 1000, plateDbIds = '', sampleDbIds = '') # 81
+brapi_post_search_images(con = con)#, descriptiveOntologyTerms = '', imageFileNames = '', imageFileSizeMax = as.integer(NA), imageFileSizeMin = as.integer(NA), imageHeightMax = as.integer(NA), imageHeightMin = as.integer(NA), imageLocation = list(), imageNames = '', imageTimeStampRangeEnd = '', imageTimeStampRangeStart = '', imageWidthMax = as.integer(NA), imageWidthMin = as.integer(NA), mimeTypes = '', observationDbIds = '', observationUnitDbIds = '') # 82
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
