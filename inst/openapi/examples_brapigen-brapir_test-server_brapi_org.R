@@ -30,6 +30,7 @@ brapi_post_search_markers(con = con)#, includeSynonyms = NA, markerDbIds = '', m
 brapi_post_allelematrices_search(con = con)#, expandHomozygotes = NA, format = as.character(NA), markerDbId = '', markerProfileDbId = '', matrixDbId = '', page = 0, pageSize = 1000, sepPhased = '', sepUnphased = '', unknownString = '') # 80
 brapi_post_search_samples(con = con)#, germplasmDbIds = '', observationUnitDbIds = '', page = 0, pageSize = 1000, plateDbIds = '', sampleDbIds = '') # 81
 brapi_post_search_images(con = con)#, descriptiveOntologyTerms = '', imageFileNames = '', imageFileSizeMax = as.integer(NA), imageFileSizeMin = as.integer(NA), imageHeightMax = as.integer(NA), imageHeightMin = as.integer(NA), imageLocation = list(), imageNames = '', imageTimeStampRangeEnd = '', imageTimeStampRangeStart = '', imageWidthMax = as.integer(NA), imageWidthMin = as.integer(NA), mimeTypes = '', observationDbIds = '', observationUnitDbIds = '') # 82
+brapi_post_images(con = con, additionalInfo = list(additionalProp1 = "string", additionalProp2 =  "string", additionalProp3 = "string"), copyright = "Copyright 2020", description = "BrAPI Logo", descriptiveOntologyTerms = c("brapi", "logo"), imageFileName = "brapi-logo.svg", imageFileSize = 3676, imageHeight = 56, imageLocation = imageLocation, imageName = "brapiLogo", imageTimeStamp = "2011-06-14", imageWidth = 258, mimeType = "image/svg", observationDbIds = c( "1", "2"), observationUnitDbId = "1") # 83 Requirement: con$token < "YYYY"
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
