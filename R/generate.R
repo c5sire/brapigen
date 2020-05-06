@@ -45,25 +45,46 @@ fetchCallNames <- function(brapiSpecs, verb = c("", "DELETE", "GET", "PATCH", "P
   }
 }
 
-### Function to retrieve call specifications for a GET call
+### Function to retrieve call specifications for a call, with either "DELETE",
+### "GET", "PATCH", "POST", or "PUT" as verb,
 ### intended to loop over allCallNames, where each element of the vector will be
-### used as idName
-getCall <- function(brapiSpecs, idName) {
+### used as idName.
+getCall <- function(brapiSpecs, idName, verb) {
+  verb <- tolower(verb)
   allCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
   idNumber <- which(allCallNames == idName)
   callName <- names(brapiSpecs[["paths"]])[idNumber]
   ## Check for type of call and deprecation
-  if ("get" %in% names(brapiSpecs[["paths"]][[callName]])) {
-    if (!("Deprecated" %in% brapiSpecs[["paths"]][[callName]][["get"]][["tags"]])) {
-      aCall <- brapiSpecs[["paths"]][[callName]][["get"]]
+  if (verb %in% names(brapiSpecs[["paths"]][[callName]])) {
+    if (!("Deprecated" %in% brapiSpecs[["paths"]][[callName]][[verb]][["tags"]])) {
+      aCall <- brapiSpecs[["paths"]][[callName]][[verb]]
       aCall[["name"]] <- allCallNames[idNumber]
       aCall[["call"]] <- callName
-      aCall[["verb"]] <- "get"
+      aCall[["verb"]] <- verb
       return(aCall)
     }
   } else {
     return()
   }
+}
+
+### Function to generate a call path for the @title section in the documentation
+aCallTitle <- function(aCall) {
+  titleCall <- gsub(pattern = "\\{", replacement = "\\\\{", x = aCall[["call"]])
+  titleCall <- gsub(pattern = "\\}", replacement = "\\\\}", x = titleCall)
+  return(titleCall)
+}
+
+### Function to generate a string ("callRefURL") to be used in @references to
+### construct the URL
+aCallRefURL <- function(aCall) {
+  callRefURL <- gsub(pattern = "\\/\\{", replacement = "__", x = aCall[["call"]])
+  callRefURL <- gsub(pattern = "\\}\\/", replacement = "__", x = callRefURL)
+  callRefURL <- sub(pattern = "^\\/", replacement = "", x = callRefURL)
+  callRefURL <- sub(pattern = "\\}$", replacement = "_", x = callRefURL)
+  callRefURL <- gsub(pattern = "\\/", replacement = "_", x = callRefURL)
+  callRefURL <- gsub(pattern = "-", replacement = "_", x = callRefURL)
+  return(callRefURL)
 }
 
 ### Function to generate @param section in the documentation
@@ -164,6 +185,45 @@ aCallParamVector <- function(aCall) {
   return(res)
 }
 
+### Function to generate @param section in the documentation for POST/PUT calls
+aCallBodyVector <- function(aCall) {
+  tempList <- aCall[["requestBody"]][["content"]][["application/json"]][["schema"]][["properties"]]
+  res <- character(0)
+  for (name in names(tempList)) {
+    tempItem <- tempList[[name]]
+    tempItem[["name"]] <- name
+    if (tempItem[["name"]] == "Authorization" | "deprecated" %in% names(tempItem)) {
+      next()
+    } else {
+      res <- c(res, paste0(name, " ",
+                           switch(tempItem[["type"]],
+                                  "array" = {
+                                    if (tempItem[["items"]][["type"]] == "string") {
+                                      "vector of type character"
+                                    }
+                                  },
+                                  "boolean" = "logical",
+                                  "integer" =  "integer",
+                                  "object" = "list",
+                                  "string"  = "character"),
+                           "; required: FALSE", "; ",
+                           tempItem[["description"]],
+                           if (tempItem[["type"]] %in% c("array", "boolean", "string")) {
+                             switch(tempItem[["type"]],
+                                    "array" = {'; default: "", when using multiple values supply as c("value1", "value2").'},
+                                    "boolean" = {"; default: NA, other possible values: TRUE | FALSE."},
+                                    "string" = {ifelse(name == "format",
+                                                       '; default: as.character(NA), other possible values: "csv", "tsv", and depending on the call "flapjack" may be supported.',
+                                                       '; default: "".')})
+                           } else {
+                             ""
+                           })
+               )
+    }
+  }
+  return(res)
+}
+
 ### Function to generate function call arguments
 aCallParamString <- function(aCall) {
   n <- length(aCall[["parameters"]])
@@ -240,6 +300,43 @@ aCallParamString <- function(aCall) {
       }
     }
   }
+  if ("requestBody" %in% names(aCall)) {
+    tempList <- aCall[["requestBody"]][["content"]][["application/json"]][["schema"]][["properties"]]
+    for (name in names(tempList)) {
+      p <- tempList[[name]]
+      p[["name"]] <- name
+      if (p[["name"]] == "Authorization" | "deprecated" %in% names(p)) {
+        next()
+      } else {
+        res <- paste(res,
+                     paste(name, "=",
+                           switch(p[["type"]],
+                                  "array" = {
+                                    if (p[["items"]][["type"]] == "string") "''"
+                                  },
+                                  "boolean" = "NA",
+                                  "integer" = {
+                                    switch(name,
+                                           "page" = "0",
+                                           "pageSize" = "1000",
+                                           "imageFileSize" = "as.integer(NA)",
+                                           "imageFileSizeMax" = "as.integer(NA)",
+                                           "imageFileSizeMin" = "as.integer(NA)",
+                                           "imageHeight" = "as.integer(NA)",
+                                           "imageHeightMax" = "as.integer(NA)",
+                                           "imageHeightMin" = "as.integer(NA)",
+                                           "imageWidth" = "as.integer(NA)",
+                                           "imageWidthMax" = "as.integer(NA)",
+                                           "imageWidthMin" = "as.integer(NA)"
+                                          )
+                                  },
+                                  "object" = "list()",
+                                  "string"  = ifelse(p[["name"]] == "format", "as.character(NA)" , "''")
+                                  )),
+                     sep = ", ")
+      }
+    }
+  }
   res <- sub(pattern = "^, ",
              replacement = "",
              x = res)
@@ -279,7 +376,7 @@ aCallReqArgs <- function(aCall) {
 ### brapigen package needs to be build!
 ### Changed to version 1.3
 brapiSpecs <- yaml::read_yaml(system.file("openapi/brapi_1.3.yaml",
-                                     package = "brapigen"))
+                                          package = "brapigen"))
 
 ### Packages to be added to DESCRIPTION of Brapir
 ### usethis::use_package(package = "curl")
@@ -312,24 +409,29 @@ invisible(base::file.copy(from = paste0("inst/templates/", fileNames),
 ###  22 POST calls
 ###  11 PUT calls
 allCallNames <- fetchCallNames(brapiSpecs = brapiSpecs)
-DELETEcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "DELETE")
-GETcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "GET")
-PATCHcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "PATCH")
-POSTcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "POST")
-PUTcalls <- fetchCallNames(brapiSpecs = brapiSpecs, verb = "PUT")
+for (verb in c("DELETE", "GET", "PATCH", "POST", "PUT")) {
+  assign(paste(verb, "calls", sep = ""), fetchCallNames(brapiSpecs, verb))
+}
+
+# for (verb in c("GET", "POST", "PUT")) {
+#   print(verb)
+#   print(get(paste(verb, "calls", sep = "")))
+# }
+# get(paste(verb, "calls", sep = ""))
 
 ### Create aCall object containing call elements
 ### tested on: see openapi/examples_brapigen-brapir_test-server_brapi_org.R
 for (callName in GETcalls) {
-  aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName)
-  ### Create aCallDesc object containing call description
-  aCallDesc <- stringr::str_replace_all(string = stringr::str_replace_all(string = aCall[["description"]],
-                                                             pattern =  c("\\n\\n\\n"),
-                                                             replacement =  "\\\n\\\n"),
-                           pattern =  c("\\n\\n"),
-                           replacement =  "\n#' ")
-
-  ### Create @param description for documentation
+  ## retrieve call setting
+  aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "GET")
+  ## Create element to substitute call address in @title
+  aCall[["titleCall"]] <- aCallTitle(aCall = aCall)
+  ## Create call description as a character vector substituted LINE FEED \
+  ## Carriage Return for @detail section.
+  aCallDesc <- gsub(pattern = "\\n(?!(#' ))",
+                    replacement = "\n#' ",
+                    x = aCall[["description"]], perl = TRUE)
+  ## Create @param descriptions for documentation
   aCallParam <- aCallParamVector(aCall = aCall)
   aCallParam <- whisker::iteratelist(x = aCallParam, value = "pname")
   aCallParam <- lapply(X = aCallParam,
@@ -338,14 +440,13 @@ for (callName in GETcalls) {
                            stringr::str_replace_all(string = elel,
                                                     pattern = "\\n\\n",
                                                     replacement = "\n#' ")})})
-
-  ### Creation function arguments for selected call
+  ## Create call reference url part for the @references section
+  aCall[["callRefURL"]] <- aCallRefURL(aCall = aCall)
+  ## Creation function arguments for selected call
   aCallArgs <- aCallParamString(aCall = aCall)
-
-  ### Identify and store required arguments
+  ## Identify and store required arguments
   aCall <- aCallReqArgs(aCall = aCall)
-
-  ### Store call family information for documentation
+  ## Store call family information for documentation in @family
   aCallFamily <- c(
     paste0(tolower(strsplit(x = brapiSpecs[["info"]][["title"]], split = "-")[[1]][1]),
            "_",
@@ -353,29 +454,107 @@ for (callName in GETcalls) {
     aCall[["tags"]]
   )
   aCallFamily <- whisker::iteratelist(aCallFamily, value = "fname")
-
-  ### Create call data for the selected call
-  aCallData <- list(name = aCall[["name"]],
+  ## Create call data list object for the selected call to be used by the
+  ## whisker package.
+  aCallData <- list(verb = aCall[["verb"]],
+                    titleCall = aCall[["titleCall"]],
                     summary = aCall[["summary"]],
                     parameters = aCallParam,
                     description = aCallDesc,
+                    version = brapiSpecs[["info"]][["version"]],
+                    tag = gsub(pattern = " ",
+                               replacement = "\\%20",
+                               x = aCall[["tags"]][1]),
+                    callRefURL = aCall[["callRefURL"]],
                     family = aCallFamily,
+                    name = gsub(pattern = "-",
+                                replacement = "_",
+                                x = aCall[["name"]]),
                     arguments = aCallArgs,
                     required = aCall[["required"]],
-                    verb = aCall[["verb"]],
                     call = aCall[["call"]],
-                    package = brapiSpecs[["info"]][["title"]],
-                    version = brapiSpecs[["info"]][["version"]],
-                    tag = aCall[["tags"]])
+                    package = brapiSpecs[["info"]][["title"]])
 
-  ### Load template for function name
+  ## Load template for function name
   template <- readLines(con = "inst/templates/function_name.mst")
-  ### Create function name
+  ## Create function name
   functionName <- whisker::whisker.render(template = template,
                                           data = aCallData)
-  ### Load template to create the GET function
+  ## Load template to create the GET function
   template <- readLines(con = "inst/templates/function_GET.mst")
-  ### Write the created GET function
+  ## Write the created GET function
+  writeLines(text = whisker::whisker.render(template = template,
+                                            data = aCallData),
+             con = paste0(dir_r, functionName, ".R"))
+}
+
+
+for (callName in POSTcalls) {# start with callName <- POSTcalls[2] "search_variables" done: 14, 16, 12, 13, 17, 9, 11, 1, 15, 10
+  ## Retrieve call setting
+  aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "POST")
+  ## Create element to substitute call address in @title
+  aCall[["titleCall"]] <- aCallTitle(aCall = aCall)
+  ## Create call description as a character vector substituted LINE FEED \
+  ## Carriage Return for @detail section.
+  aCallDesc <- gsub(pattern = "\\n(?!(#' ))",
+                    replacement = "\n#' ",
+                    x = aCall[["description"]], perl = TRUE)
+  ## Create @param descriptions for documentation
+  aCallParam <- aCallParamVector(aCall = aCall)
+  aCallParam <- whisker::iteratelist(x = aCallParam, value = "pname")
+  aCallParam <- lapply(X = aCallParam,
+                       FUN = function(el) {
+                         lapply(X = el, FUN = function(elel) {
+                           stringr::str_replace_all(string = elel,
+                                                    pattern = "\\n\\n",
+                                                    replacement = "\n#' ")})})
+  if ("requestBody" %in% names(aCall)) {
+    callBodyVector <- aCallBodyVector(aCall = aCall)
+    callBodyVector <- whisker::iteratelist(x = callBodyVector, value = "pname")
+    aCallParam <- c(aCallParam, callBodyVector)
+  }
+  ## Create call reference url part for the @references section
+  aCall[["callRefURL"]] <- aCallRefURL(aCall = aCall)
+  ## Creation function arguments for selected call
+  aCallArgs <- aCallParamString(aCall = aCall)
+  ## Identify and store required arguments
+  aCall <- aCallReqArgs(aCall = aCall)
+  ## Store call family information for documentation in @family
+  aCallFamily <- c(
+    paste0(tolower(strsplit(x = brapiSpecs[["info"]][["title"]], split = "-")[[1]][1]),
+           "_",
+           brapiSpecs[["info"]][["version"]]),
+    aCall[["tags"]])
+  aCallFamily <- whisker::iteratelist(aCallFamily, value = "fname")
+  ## Create call data list object for the selected call to be used by the
+  ## whisker package.
+  aCallData <- list(verb = aCall[["verb"]],
+                    titleCall = aCall[["titleCall"]],
+                    summary = aCall[["summary"]],
+                    parameters = aCallParam,
+                    description = aCallDesc,
+                    version = brapiSpecs[["info"]][["version"]],
+                    tag = gsub(pattern = " ",
+                               replacement = "\\%20",
+                               x = aCall[["tags"]][1]),
+                    callRefURL = aCall[["callRefURL"]],
+                    family = aCallFamily,
+                    name = gsub(pattern = "-",
+                                replacement = "_",
+                                x = aCall[["name"]]),
+                    arguments = aCallArgs,
+                    required = aCall[["required"]],
+                    call = aCall[["call"]],
+                    package = brapiSpecs[["info"]][["title"]])
+
+  ## Load template for function name
+  template <- readLines(con = "inst/templates/function_name.mst")
+  ## Create function name
+  functionName <- whisker::whisker.render(template = template,
+                                          data = aCallData)
+  ## Load template to create the GET function
+  template <- readLines(con = "inst/templates/function_POST.mst")
+  ## Write the created GET function
   writeLines(text = whisker::whisker.render(template = template,
                                             data = aCallData),
              con = paste0(dir_r, functionName, ".R"))
