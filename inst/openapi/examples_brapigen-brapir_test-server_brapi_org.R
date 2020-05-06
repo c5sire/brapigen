@@ -1,4 +1,4 @@
-## tested calls: GET 72, POST 12
+## tested calls: GET 72, POST 13
 ## result section: Master
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
 brapi_get_trials_trialDbId(con = con, trialDbId = "101") # 8
@@ -32,6 +32,7 @@ brapi_post_search_samples(con = con)#, germplasmDbIds = '', observationUnitDbIds
 brapi_post_search_images(con = con)#, descriptiveOntologyTerms = '', imageFileNames = '', imageFileSizeMax = as.integer(NA), imageFileSizeMin = as.integer(NA), imageHeightMax = as.integer(NA), imageHeightMin = as.integer(NA), imageLocation = list(), imageNames = '', imageTimeStampRangeEnd = '', imageTimeStampRangeStart = '', imageWidthMax = as.integer(NA), imageWidthMin = as.integer(NA), mimeTypes = '', observationDbIds = '', observationUnitDbIds = '') # 82
 brapi_post_images(con = con, additionalInfo = list(company = "Wageningen University & Research", group =  "Plant Science Group",  businessUnit= "Biometris"), copyright = "Copyright 2020", description = "WUR Logo", descriptiveOntologyTerms = c("wur", "logo"), imageFileName = "WUR_RGB_standard.png", imageFileSize = 15121, imageHeight = 95, imageLocation = imageLocation, imageName = "wurLogo", imageTimeStamp = "2020-05-05", imageWidth = 500, mimeType = "image/png", observationDbIds = c( "1", "2"), observationUnitDbId = "1") # 83 Requirements: con$token < "YYYY", library(geojsonR); init <- TO_GeoJson$new(); imageLocation <- list(); pointData <- c(5.665797, 51.984732); imageLocation[["geometry"]] <- init$Point(data = pointData, stringify = FALSE); imageLocation$type <- "Feature"; rm(init, pointData)
 brapi_post_methods(con = con, class = "Numeric", description = "Net Weight/Ha", formula = "NA", methodName = "Phenotypic analysis", ontologyReference = ontologyReference, reference = "WEBPAGE") # 84 Requirements: con$token < "YYYY", ontologyReference <- list(documentationLinks = data.frame(URL = "https://www.cropontology.org/terms/CO_333:1000040/", type = "webpage"), ontologyDbId = "CO_333:1000040", ontologyName = "cropontology.org", version = "5.0")
+brapi_post_people(con = con, description = "Count BrAPIR", emailAddress = "somewhere.only@we.know", firstName = "Maikel", lastName = "Verouden", mailingAddress = "P.O. Box 16, 6700 AA Wageningen, The Netherlands", middleName = "", phoneNumber = "+31123456789", userID = "verou007") # 85 Requirement: con$token < "YYYY"
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
