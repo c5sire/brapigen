@@ -212,12 +212,18 @@ aCallBodyVector <- function(aCall) {
                              switch(tempItem[["type"]],
                                     "array" = {'; default: "", when using multiple values supply as c("value1", "value2").'},
                                     "boolean" = {"; default: NA, other possible values: TRUE | FALSE."},
-                                    "integer" = {ifelse(name == "decimalPlaces",
+                                    "integer" = {ifelse(name %in% c("decimalPlaces", "listSize"),
                                                         "; default: 0.",
                                                         "")},
-                                    "string" = {ifelse(name == "format",
-                                                       '; default: as.character(NA), other possible values: "csv", "tsv", and depending on the call "flapjack" may be supported.',
-                                                       '; default: "".')})
+                                    "string" = {
+                                      if (name %in% c("format",
+                                                      "listType")) {
+                                        switch(name,
+                                               "format"   = '; default: as.character(NA), other possible values: "csv", "tsv", and depending on the call "flapjack" may be supported.',
+                                               "listType" = '; default: "", other possible values: "germplasm"|"markers"|"observations"|"observationUnits"|"observationVariables"|"programs"|"samples"|"studies"|"trials"')
+                                      } else {
+                                        '; default: "".'
+                                      }})
                            } else {
                              ""
                            })
@@ -330,6 +336,7 @@ aCallParamString <- function(aCall) {
                                            "imageWidth" = "as.integer(NA)",
                                            "imageWidthMax" = "as.integer(NA)",
                                            "imageWidthMin" = "as.integer(NA)",
+                                           "listSize" = "0",
                                            "page" = "0",
                                            "pageSize" = "1000"
                                           )
@@ -493,7 +500,7 @@ for (callName in GETcalls) {
 }
 
 
-for (callName in POSTcalls) {# start with callName <- POSTcalls[] "search_variables" done: 14,16,12,13,17,9,11,1,15,10,2,5,6,8
+for (callName in POSTcalls) {# start with callName <- POSTcalls[] "search_variables" done: 14,16,12,13,17,9,11,1,15,10,2,5,6,8,20,3
   ## Retrieve call setting
   aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "POST")
   ## Create element to substitute call address in @title
