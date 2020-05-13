@@ -1,4 +1,4 @@
-## tested calls: GET 72, POST 14
+## tested calls: GET 72, POST 16
 ## result section: Master
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
 brapi_get_trials_trialDbId(con = con, trialDbId = "101") # 8
@@ -34,6 +34,8 @@ brapi_post_images(con = con, additionalInfo = list(company = "Wageningen Univers
 brapi_post_methods(con = con, class = "Numeric", description = "Net Weight/Ha", formula = "NA", methodName = "Phenotypic analysis", ontologyReference = ontologyReference, reference = "WEBPAGE") # 84 Requirements: con$token < "YYYY", ontologyReference <- list(documentationLinks = data.frame(URL = "https://www.cropontology.org/terms/CO_333:1000040/", type = "webpage"), ontologyDbId = "CO_333:1000040", ontologyName = "cropontology.org", version = "5.0")
 brapi_post_people(con = con, description = "Count BrAPIR", emailAddress = "somewhere.only@we.know", firstName = "Maikel", lastName = "Verouden", mailingAddress = "P.O. Box 16, 6700 AA Wageningen, The Netherlands", middleName = "", phoneNumber = "+31123456789", userID = "verou007") # 85 Requirement: con$token < "YYYY"
 brapi_post_scales(con = con, dataType = 'Ordinal', decimalPlaces = 0, ontologyReference = ontologyReference, scaleName = 'clothing sizes', validValues = validValues, xref = 'xref') # 86 Requirements: con$token < "YYYY", ontologyReference = list(documentationLinks = data.frame(URL = "https://Ontology.org/s6", type = "RDF"), ontologyDbId = "MO_123", ontologyName = "Ontology.org", version = "17"), validValues = list(categories = c("xs", "s", "m", "l", "xl", "xxl"), max = 0, min = 0)
+brapi_post_traits(con = con, alternativeAbbreviations = "", attribute = "size", class = "morphological trait", description = "Size designation of clothes", entity = "clothing", mainAbbreviation = "CS", ontologyReference = ontologyReference, status = "legacy", synonyms = "", traitName = "clothingSize", xref = "none") # 87 Requirements: con$token < "YYYY", ontologyReference = list(documentationLinks = data.frame(URL = "https://Ontology.org/s6", type = "RDF"), ontologyDbId = "MO_123", ontologyName = "Ontology.org", version = "17") ISSUE NEEDS TO BE RESOLVED!
+brapi_post_lists(con = con, data = c("breedingStudy1", "breedingStudy2"), description = "list of breeding studies", listName = "breedList1", listOwnerName = "Rob Robertson", listOwnerPersonDbId = "person2", listSize = 2, listSource = "breeding program generator", listType = "studies") # 88 Requirement: con$token < "YYYY"
 
 
 ## result section: Detail
