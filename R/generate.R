@@ -500,7 +500,9 @@ for (callName in GETcalls) {
 }
 
 
-for (callName in POSTcalls) {# start with callName <- POSTcalls[7] "search_variables" done: 14,16,12,13,17,9,11,1,15,10,2,5,6,8,20,3
+for (callName in POSTcalls) {# start with callName <- POSTcalls[]
+# done: 1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,20
+# to do: 4,18,19,21,22
   ## Retrieve call setting
   aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "POST")
   ## Create element to substitute call address in @title
