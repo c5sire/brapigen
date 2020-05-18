@@ -1,4 +1,4 @@
-## tested calls: GET 72, POST 16
+## tested calls: GET 72, POST 18
 ## result section: Master
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
 brapi_get_trials_trialDbId(con = con, trialDbId = "101") # 8
@@ -37,6 +37,7 @@ brapi_post_scales(con = con, dataType = 'Ordinal', decimalPlaces = 0, ontologyRe
 brapi_post_traits(con = con, alternativeAbbreviations = "", attribute = "size", class = "morphological trait", description = "Size designation of clothes", entity = "clothing", mainAbbreviation = "CS", ontologyReference = ontologyReference, status = "legacy", synonyms = "", traitName = "clothingSize", xref = "none") # 87 Requirements: con$token <- "YYYY", ontologyReference = list(documentationLinks = data.frame(URL = "https://Ontology.org/s6", type = "RDF"), ontologyDbId = "MO_123", ontologyName = "Ontology.org", version = "17")
 brapi_post_lists(con = con, data = c("breedingStudy1", "breedingStudy2"), description = "list of breeding studies", listName = "breedList1", listOwnerName = "Rob Robertson", listOwnerPersonDbId = "person2", listSize = 2, listSource = "breeding program generator", listType = "studies") # 88 Requirement: con$token <- "YYYY"
 brapi_post_phenotypes(con = con, format = as.character(NA), data = data) # 89 Requirements: con$token <- "YYYY"; data <- data.frame(observatioUnitDbId = "7", studyDbId = "1002"); datadf <- data.frame(collector = c("C. Technical", "C. Technical"), observationDbId = c("", ""), observationTimeStamp = c("2020-05-15T15:30:00.760Z", "2020-05-15T15:31:16.760Z"), observationVariableDbId = c("MO_123:100002", "MO_123:100003"), observationVariableName = c("Plant height", "Carotenoid"), season = c("spring", "spring"), value = c("1.75", "1.4")); data[["observations"]] <- list(datadf)
+brapi_post_lists_listDbId_items(con = con, listDbId = "list1", items = c("4", "5")) # 90 Requirement: con$token <- "YYYY"
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
