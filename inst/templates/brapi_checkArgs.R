@@ -19,7 +19,7 @@ brapi_checkArgs <- function(usedArgs, reqArgs) {
         stop('Required argument: "', i, '" should be of type character, e.g. ', i, ' = "text".')
       }
       ## Check if required argument has more than zero characters
-      if (!(nchar(reqArgs[[i]]) > 0)) {
+      if (!all(nchar(reqArgs[[i]]) > 0)) {
         stop('Required argument: "', i, '" should at least have length one.')
       }
       if (i == "Accept" && !(usedArgs[[i]] %in% c("application/json", "text/csv", "text/tsv", "application/flapjack"))) {
