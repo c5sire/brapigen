@@ -1,0 +1,61 @@
+#' @title
+#' {{verb}} {{titleCall}}
+#'
+#' @description
+#' {{summary}}
+#'
+#' @param con list; required: TRUE; BrAPI connection object
+{{#parameters}}
+#' @param {{pname}}
+{{/parameters}}
+#'
+#' @details {{description}}
+#'
+#' @return data.frame
+#'
+#' @author brapir generator package
+#'
+#' @references \href{https://app.swaggerhub.com/apis/PlantBreedingAPI/BrAPI/{{version}}#/{{tag}}/{{verb}}_{{callRefURL}} }{BrAPI SwaggerHub}
+#'
+{{#family}}
+#' @family {{fname}}
+{{/family}}
+#'
+#' @examples
+#' \dontrun{
+#'
+#' # Create a connection object
+#' con <- brapi_db()$testserver
+#' }
+#'
+#' @export
+brapi_{{verb}}_{{name}} <- function(con = NULL, {{arguments}}) {
+  ## Create a list of used arguments
+  usedArgs <- brapi_usedArgs(origValues = FALSE)
+  ## Check if BrAPI server can be reached given the connection details
+  brapi_checkCon(con = usedArgs[["con"]], verbose = FALSE)
+  ## Check validity of used and required arguments
+  brapi_checkArgs(usedArgs, reqArgs = "{{required}}")
+  ## Obtain the call url
+  callurl <- brapi_PUT_callURL(usedArgs = usedArgs,
+                               callPath = "{{call}}",
+                               reqArgs = "{{required}}",
+                               packageName = "{{package}}",
+                               callVersion = {{version}})
+  ## Build the Body
+  callbody <- brapi_PUT_callBody(usedArgs = usedArgs,
+                                 reqArgs = "{{required}}")
+  try({
+    ## Make the call and receive the response
+    resp <- brapi_PUT(url = callurl, body = callbody, usedArgs = usedArgs)
+    ## Extract the content from the response object in human readable form
+    cont <- httr::content(x = resp, as = "text", encoding = "UTF-8")
+    ## Convert the content object into a data.frame
+    out <- brapi_result2df(cont, usedArgs)
+  })
+  ## Set class of output
+  class(out) <- c(class(out), "brapi_{{verb}}_{{name}}")
+  ## Show pagination information from metadata
+  brapi_serverinfo_metadata(cont)
+  return(out)
+}
