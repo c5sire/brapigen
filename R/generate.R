@@ -502,9 +502,7 @@ for (callName in GETcalls) {
 
 
 for (callName in POSTcalls) {
-# start with callName <- POSTcalls[]
-# done: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,20,21,22
-# to do: 18
+# start with callName <- POSTcalls[] to do: 18
   ## Retrieve call setting
   aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "POST")
   ## Create element to substitute call address in @title
@@ -569,6 +567,80 @@ for (callName in POSTcalls) {
                                           data = aCallData)
   ## Load template to create the GET function
   template <- readLines(con = "inst/templates/function_POST.mst")
+  ## Write the created GET function
+  writeLines(text = whisker::whisker.render(template = template,
+                                            data = aCallData),
+             con = paste0(dir_r, functionName, ".R"))
+}
+
+for (callName in PUTcalls) {
+  # start with callName <- PUTcalls[]
+  # done:
+  # to do: 1,2,3,4,5,6,7,8,9,10,11
+  ## Retrieve call setting
+  aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "PUT")
+  ## Create element to substitute call address in @title
+  aCall[["titleCall"]] <- aCallTitle(aCall = aCall)
+  ## Create call description as a character vector substituted LINE FEED \
+  ## Carriage Return for @detail section.
+  aCallDesc <- gsub(pattern = "\\n(?!(#' ))",
+                    replacement = "\n#' ",
+                    x = aCall[["description"]], perl = TRUE)
+  ## Create @param descriptions for documentation
+  aCallParam <- aCallParamVector(aCall = aCall)
+  aCallParam <- whisker::iteratelist(x = aCallParam, value = "pname")
+  aCallParam <- lapply(X = aCallParam,
+                       FUN = function(el) {
+                         lapply(X = el, FUN = function(elel) {
+                           stringr::str_replace_all(string = elel,
+                                                    pattern = "\\n\\n",
+                                                    replacement = "\n#' ")})})
+  if ("requestBody" %in% names(aCall)) {
+    callBodyVector <- aCallBodyVector(aCall = aCall)
+    callBodyVector <- whisker::iteratelist(x = callBodyVector, value = "pname")
+    aCallParam <- c(aCallParam, callBodyVector)
+  }
+  ## Create call reference url part for the @references section
+  aCall[["callRefURL"]] <- aCallRefURL(aCall = aCall)
+  ## Creation function arguments for selected call
+  aCallArgs <- aCallParamString(aCall = aCall)
+  ## Identify and store required arguments
+  aCall <- aCallReqArgs(aCall = aCall)
+  ## Store call family information for documentation in @family
+  aCallFamily <- c(
+    paste0(tolower(strsplit(x = brapiSpecs[["info"]][["title"]], split = "-")[[1]][1]),
+           "_",
+           brapiSpecs[["info"]][["version"]]),
+    aCall[["tags"]])
+  aCallFamily <- whisker::iteratelist(aCallFamily, value = "fname")
+  ## Create call data list object for the selected call to be used by the
+  ## whisker package.
+  aCallData <- list(verb = aCall[["verb"]],
+                    titleCall = aCall[["titleCall"]],
+                    summary = aCall[["summary"]],
+                    parameters = aCallParam,
+                    description = aCallDesc,
+                    version = brapiSpecs[["info"]][["version"]],
+                    tag = gsub(pattern = " ",
+                               replacement = "\\%20",
+                               x = aCall[["tags"]][1]),
+                    callRefURL = aCall[["callRefURL"]],
+                    family = aCallFamily,
+                    name = gsub(pattern = "-",
+                                replacement = "_",
+                                x = aCall[["name"]]),
+                    arguments = aCallArgs,
+                    required = aCall[["required"]],
+                    call = aCall[["call"]],
+                    package = brapiSpecs[["info"]][["title"]])
+
+  ## Load template for function name
+  template <- readLines(con = "inst/templates/function_name.mst")
+  ## Create function name
+  functionName <- whisker::whisker.render(template = template,
+                                          data = aCallData)
+  ## Load template to create the GET function
+  template <- readLines(con = "inst/templates/function_PUT.mst")
   ## Write the created GET function
   writeLines(text = whisker::whisker.render(template = template,
                                             data = aCallData),
