@@ -575,8 +575,8 @@ for (callName in POSTcalls) {
 
 for (callName in PUTcalls) {
   # start with callName <- PUTcalls[]
-  # done:
-  # to do: 1,2,3,4,5,6,7,8,9,10,11
+  # done: 1,2
+  # to do: 3,4,5,6,7,8,9,10,11
   ## Retrieve call setting
   aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "PUT")
   ## Create element to substitute call address in @title
