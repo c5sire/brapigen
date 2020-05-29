@@ -1,4 +1,4 @@
-## tested calls: GET 72, POST 21, PUT 3
+## tested calls: GET 72, POST 21, PUT 4
 ##
 ## library(brapir)
 ## con <- brapi_db()$testserver
@@ -50,6 +50,7 @@ brapi_post_vendor_plates(con = con, clientId = "BrAPIR", numberOfSamples = 4, pl
 brapi_put_images_imageDbId(con = con, imageDbId = "img2", additionalInfo = additionalInfo <- list(additionalProp1 = "addProp1string", additionalProp2 = "addProp2string", additionalProp3 = "addProp3string"), copyright = "Copyright 2020", description = "BrAPI Logo 2020", descriptiveOntologyTerms = c("brapi", "logo", "svg"), imageFileName = "brapi-logo.svg", imageFileSize = 3676, imageHeight = 56, imageLocation = imageLocation, imageName = "modified_brapiLogo", imageTimeStamp = "2020-05-29T11:30:12.007Z", imageWidth = 258, mimeType = "image/svg", observationDbIds = c("1", "2"), observationUnitDbId = "1") # 94 Requirements: con$token <- "YYYY" and library(geojsonR); init <- TO_GeoJson$new(); imageLocation <- list(); pointData <- c(5.663038, 51.986648); imageLocation[["geometry"]] <- init$Point(data = pointData, stringify = FALSE); imageLocation[["type"]] <- "Feature"; rm(init, pointData)
 brapi_put_images_imageDbId_imagecontent(con = con, imageDbId = "img2", imageFileName = "../../../Pictures/brapi-logo.svg") # 95 Requirement: con$token <- "YYYY"
 brapi_put_lists_listDbId(con = con, listDbId = "list1", data = c("1", "2", "3", "4", "5"), description = "Example list of germplasm", listName = "Example List 1", listOwnerName = "Bob Robertson", listOwnerPersonDbId = "person1", listSize = 5, listSource = "User Created", listType = "germplasm") # 96 Requirement: con$token <- "YYYY"
+brapi_put_methods_methodDbId(con = con, methodDbId = "m1", class = "Numeric", description = "Standard measuring tape", formula = "sqrt(a^2 + b^2) = c", methodName = "Tape Measurement", ontologyReference = ontologyReference, reference = "goggles.com") # 97 Requirements: con$token <- "YYYY"; ontologyReference <- list(documentationLinks = data.frame(URL = "https://ontology.org/m1",  type = "WEBPAGE"), ontologyDbId = "MO_123", ontologyName = "Ontology.org", version = "17")
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
