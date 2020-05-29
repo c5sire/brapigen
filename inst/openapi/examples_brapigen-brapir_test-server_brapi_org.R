@@ -1,4 +1,4 @@
-## tested calls: GET 72, POST 20
+## tested calls: GET 72, POST 21, PUT 2
 ## result section: Master
 brapi_get_locations_locationDbId(con = con, locationDbId = "1") # 6
 brapi_get_trials_trialDbId(con = con, trialDbId = "101") # 8
@@ -41,6 +41,8 @@ brapi_post_lists_listDbId_items(con = con, listDbId = "list1", items = c("4", "5
 brapi_post_studies_studyDbId_table(con = con, studyDbId = "1001", data = data, headerRow = headerRow, observationVariableDbIds = observationVariableDbIds) # 91 Requirements: con$token <- "YYYY" for data, headerRow and observationVariableDbIds see example section of documentation
 brapi_post_vendor_orders(con = con, clientId = "BrAPIR", numberOfSamples = 4, plates = plates, requiredServiceInfo = list(additionalProp1 = "stringAddProp1", additionalProp2 = "stringAddProp2", additionalProp3 = "stringAddProp3"), sampleType = "DNA", serviceIds = "vsp1") # 92 Requirements: con$token <- "YYYY" for plates see example section of documentation
 brapi_post_vendor_plates(con = con, clientId = "BrAPIR", numberOfSamples = 4, plates = plates, sampleType = "DNA") # 93 Requirements: con$token <- "YYYY" for plates see example section of documentation
+brapi_put_images_imageDbId(con = con, imageDbId = "img2", additionalInfo = additionalInfo <- list(additionalProp1 = "addProp1string", additionalProp2 = "addProp2string", additionalProp3 = "addProp3string"), copyright = "Copyright 2020", description = "BrAPI Logo 2020", descriptiveOntologyTerms = c("brapi", "logo", "svg"), imageFileName = "brapi-logo.svg", imageFileSize = 3676, imageHeight = 56, imageLocation = imageLocation, imageName = "modified_brapiLogo", imageTimeStamp = "2020-05-29T11:30:12.007Z", imageWidth = 258, mimeType = "image/svg", observationDbIds = c("1", "2"), observationUnitDbId = "1") # 94 Requirements: con$token <- "YYYY" and library(geojsonR); init <- TO_GeoJson$new(); imageLocation <- list(); pointData <- c(5.663038, 51.986648); imageLocation[["geometry"]] <- init$Point(data = pointData, stringify = FALSE); imageLocation[["type"]] <- "Feature"; rm(init, pointData)
+brapi_put_images_imageDbId_imagecontent(con = con, imageDbId = "img2", imageFileName = "../../../Pictures/brapi-logo.svg") # 95 Requirement: con$token <- "YYYY"
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
