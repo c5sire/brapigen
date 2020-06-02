@@ -1,4 +1,4 @@
-## tested calls: GET 72, POST 21, PUT 4
+## tested calls: GET 72, POST 21, PUT 6
 ##
 ## library(brapir)
 ## con <- brapi_db()$testserver
@@ -51,6 +51,8 @@ brapi_put_images_imageDbId(con = con, imageDbId = "img2", additionalInfo = addit
 brapi_put_images_imageDbId_imagecontent(con = con, imageDbId = "img2", imageFileName = "../../../Pictures/brapi-logo.svg") # 95 Requirement: con$token <- "YYYY"
 brapi_put_lists_listDbId(con = con, listDbId = "list1", data = c("1", "2", "3", "4", "5"), description = "Example list of germplasm", listName = "Example List 1", listOwnerName = "Bob Robertson", listOwnerPersonDbId = "person1", listSize = 5, listSource = "User Created", listType = "germplasm") # 96 Requirement: con$token <- "YYYY"
 brapi_put_methods_methodDbId(con = con, methodDbId = "m1", class = "Numeric", description = "Standard measuring tape", formula = "sqrt(a^2 + b^2) = c", methodName = "Tape Measurement", ontologyReference = ontologyReference, reference = "goggles.com") # 97 Requirements: con$token <- "YYYY"; ontologyReference <- list(documentationLinks = data.frame(URL = "https://ontology.org/m1",  type = "WEBPAGE"), ontologyDbId = "MO_123", ontologyName = "Ontology.org", version = "17")
+brapi_put_people_personDbId(con = con, personDbId = "person1", description = "Test Example Person", emailAddress = "firstname.lastname@wur.nl", firstName = "Firstname", lastName = "Lastname", mailingAddress = "Droevendaalsesteeg 1, 6708 PB Wageningen, The Netherlands", middleName = "Middlename", phoneNumber = "+31317481234", userID = "gebrui001") # 98 Requirement: con$token <- "YYYYY"
+brapi_put_samples(con = con, germplasmDbId = "2", notes = "Testing PUT function", observationUnitDbId = "3", plantDbId = "", plateDbId = "pl1", plateIndex = 16, plotDbId = "2", sampleDbId = "", sampleTimestamp = "2020-06-02T12:05:03Z", sampleType = "DNA", studyDbId = "1002", takenBy = "Rob", tissueType = "Stem") # 99 Requirement: con$token <- "YYYYY"
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
