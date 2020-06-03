@@ -22,7 +22,7 @@ brapi_get_germplasm_germplasmDbId_progeny(con = con, germplasmDbId = "1") # 42
 brapi_get_markers_markerDbId(con = con, markerDbId = "mr01") # 47
 brapi_get_samples_sampleDbId(con = con, sampleDbId = "sam01") # 58
 brapi_get_vendor_orders_orderId_status(con = con, orderId = "vo1") # 63
-brapi_get_vendor_plates_submissionId(con = con, submissionId = "ps1") # 64 MANUALLY ADDED DESCRIPTION OF submissionId as: The submissionId returned by the vendor, when a set of plates was successfully submitted. It is obtained from the response of "POST /vendor/plates" call.
+brapi_get_vendor_plates_submissionId(con = con, submissionId = "ps1") # 64 MANUALLY ADDED DESCRIPTION OF submissionId as: character; required: TRUE; A unique alpha-numeric identifier, which identifies a set of plates which have been successfully submitted. It is obtained from the response of the "POST /vendor/plates" call implemented in the `brapi_post_vendor_plates()` function; default: &quot;&quot;.
 brapi_get_vendor_specifications(con = con) # 65 MANUALLY ADAPTED function arguments!
 brapi_get_images_imageDbId(con = con, imageDbId = "img1") # 69
 brapi_get_people_personDbId(con = con, personDbId = "person1") # 72
@@ -83,7 +83,7 @@ brapi_get_breedingmethods(con = con)#, page = 0, pageSize = 1000) # 34
 brapi_get_germplasm(con = con)#, germplasmPUI = "", germplasmDbId = "", germplasmName = "", commonCropName = "", page = 0, pageSize = 1000) # 36
 brapi_get_search_germplasm_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 43
 brapi_get_attributes(con = con)#, attributeCategoryDbId = "", page = 0, pageSize = 1000) # 44
-brapi_get_attributes_categories(con = con, page = 0)#, pageSize = 1000) # 45
+brapi_get_attributes_categories(con = con)#, page = 0, pageSize = 1000) # 45
 brapi_get_markers(con = con)#, markerDbId = "", markerName = "", includeSynonyms = NA, type = "", page = 0, pageSize = 1000) # 46
 brapi_get_search_markers_searchResultsDbId(con = con, searchResultsDbId = "")#, page = 0, pageSize = 1000) # 48
 brapi_get_allelematrices(con = con, studyDbId = "1001")#, page = 0, pageSize = 1000) # 49
