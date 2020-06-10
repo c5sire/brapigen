@@ -1,4 +1,4 @@
-## tested calls: GET 72, POST 21, PUT 9
+## tested calls: GET 72, POST 21, PUT 10
 ##
 ## library(brapir)
 ## con <- brapi_db()$testserver
@@ -56,6 +56,7 @@ brapi_put_samples(con = con, germplasmDbId = "2", notes = "Testing PUT function"
 brapi_put_scales_scaleDbId(con = con, scaleDbId = "", dataType = "Ordinal", decimalPlaces = 0, ontologyReference = ontologyReference, scaleName = "Clothing Sizes", validValues = validValues, xref = "xref") # 100 Requirements: con$token <- "YYYY", use scaleDbId from brapi_post_scales() example 86; ontologyReference = list(documentationLinks = data.frame(URL = "https://Ontology.org/s5", type = "RDF"), ontologyDbId = "MO_123", ontologyName = "Ontology.org",version = "17"); validValues = list(categories = c("xxs", "xs", "s", "m", "l", "xl", "xxl"), max = 0, min = 0)
 brapi_put_studies_studyDbId_layouts(con = con, studyDbId = '1001', layout = layout) # 101 Requirements: con$token <- "YYYY"; layout <- data.frame(blockNumber = c("12"), entryType = c("CHECK"), observationUnitDbId = c("1"), positionCoordinateX = c("12"), positionCoordinateXType = c("GRID_COL"), positionCoordinateY = c("12"), positionCoordinateYType = c("GRID_ROW"), replicate = c("1"))
 brapi_put_studies_studyDbId_observations(con = con, studyDbId = '1001', observations = observations) # 102 Requirements: con$token <- "YYYY", observations <- data.frame(collector = c("Jack", "Freddy"), observationDbId = c("3", ""), observationTimeStamp = c(paste0(anytime::iso8601(lubridate::with_tz(Sys.time(), tzone = "UTC")), "Z"), paste0(anytime::iso8601(lubridate::with_tz(Sys.time(), tzone = "UTC")), "Z")), observationUnitDbId = c("2", "4"), observationVariableDbId = c("MO_123:100002", "MO_123:100006"), value = c("2.2", "0.8"))
+brapi_put_traits_traitDbId(con = con, traitDbId = "", alternativeAbbreviations = c("clothSize", "sizeCloth"),                          attribute = "size", class = "physiological trait", description = "Size designation of clothes", entity = "clothing", mainAbbreviation = "CS", ontologyReference = ontologyReference, status = "legacy", synonyms = c("sizeClothing", "cSizes"), traitName = "clothingSize", xref = "xref") # 103 Requirements: con$token <- "YYYY", traitDbId retrieved by brapi_get_traits() after using brapi_post_traits() in example 87, ontologyReference <- list(documentationLinks = data.frame(URL = "https://Ontology.org/s6", type = "RDF"), ontologyDbId = "MO_123", ontologyName = "Ontology.org", version = "17")
 
 ## result section: Detail
 brapi_get_calls(con = con)#, dataType = "application/json") # 1
