@@ -434,6 +434,7 @@ for (verb in c("DELETE", "GET", "PATCH", "POST", "PUT")) {
 ### Create aCall object containing call elements
 ### tested on: see openapi/examples_brapigen-brapir_test-server_brapi_org.R
 for (callName in GETcalls) {
+  # start with callName <- GETcalls[] for an individual call
   ## retrieve call setting
   aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "GET")
   ## Create element to substitute call address in @title
@@ -500,9 +501,8 @@ for (callName in GETcalls) {
              con = paste0(dir_r, functionName, ".R"))
 }
 
-
 for (callName in POSTcalls) {
-# start with callName <- POSTcalls[] to do: 18
+  # start with callName <- POSTcalls[] for an individual call
   ## Retrieve call setting
   aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "POST")
   ## Create element to substitute call address in @title
@@ -574,9 +574,7 @@ for (callName in POSTcalls) {
 }
 
 for (callName in PUTcalls) {
-  # start with callName <- PUTcalls[]
-  # done: 1,2,3,4
-  # to do: 5,6,7,8,9,10,11
+  # start with callName <- PUTcalls[] for an individual call
   ## Retrieve call setting
   aCall <- getCall(brapiSpecs = brapiSpecs, idName = callName, verb = "PUT")
   ## Create element to substitute call address in @title
