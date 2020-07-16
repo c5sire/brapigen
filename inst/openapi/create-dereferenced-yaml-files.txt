@@ -8,11 +8,18 @@ For version 1.3 create a dereferenced yaml file:
 3. Run in terminal: python3 ./buildOpenAPI.py ../
 4. Next run: python3 ./derefAll2filev1.3.py ../brapi_openapi.yaml ../brapi_1.3.yaml
 
-For version 2.0 create a dereferenced yaml file:
-1. git checkout brapi-v2-dev
+To create a full dereferenced version 2.0 yaml file:
+1. git checkout brapi-v2-dev -> after v2.0 release: git checkout master
 2. Make sure you are at the top level
 3. Run in terminal: python3 ./Scripts/buildOpenAPI.py ./Specification/BrAPI-Core/ ./Specification/BrAPI-Germplasm/ ./Specification/BrAPI-Genotyping/ ./Specification/BrAPI-Phenotyping/ ./Specification/Components/
 5. cd Specification/BrAPI-Core/
 6. Next run: python3 ../../Scripts/derefAll2Filev2.0.py ./brapi_openapi.yaml ./brapi_2.0.yaml
 
+To create modular dereferenced version 2.0 yaml files:
+1. git checkout brapi-v2-dev -> after v2.0 release: git checkout master
+2. Make sure you are at the top level
+3. Run in terminal: python3 ./Scripts/buildOpenAPI.py ./Specification/BrAPI-*/ ./Specification/Components/
+5. cd Specification/BrAPI-*/
+6. Next run: python3 ../../Scripts/derefAll2Filev2.0.py ./brapi_openapi.yaml ./brapi-*_2.0.yaml
+Replace * with Core / Genotyping / Germplasm / Phenotyping where the first character is upper case in step 3. and 5. and lower case in step 6.
 
