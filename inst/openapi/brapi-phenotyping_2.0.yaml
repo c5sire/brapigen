@@ -4904,31 +4904,6 @@ paths:
       requestBody:
         content:
           application/json:
-            example:
-              <observationDbId_1>:
-                collector: 917d3ae0
-                germplasmDbId: 2408ab11
-                germplasmName: A0000001
-                observationTimeStamp: 2019-06-28 18:49:43.516000
-                observationUnitDbId: 598111d4
-                observationUnitName: Plot 1
-                observationVariableDbId: c403d107
-                observationVariableName: Plant Height in meters
-                studyDbId: ef2829db
-                uploadedBy: a2f7f60b
-                value: '2.3'
-              <observationDbId_2>:
-                collector: 03ba8c2c
-                germplasmDbId: 69310ca4
-                germplasmName: A0000438
-                observationTimeStamp: 2019-06-28 18:49:43.516000
-                observationUnitDbId: 1177a714
-                observationUnitName: Plot 13
-                observationVariableDbId: e4f8ba8c
-                observationVariableName: Carotenoid
-                studyDbId: 6f9e267d
-                uploadedBy: 182c72ad
-                value: '2.5'
             schema:
               additionalProperties:
                 properties:
@@ -5019,6 +4994,47 @@ paths:
                     example: '2.3'
                     type: string
                 type: object
+              example:
+                <observationDbId_1>:
+                  additionalInfo: {}
+                  collector: 917d3ae0
+                  externalReferences:
+                  - referenceID: 75a50e76
+                    referenceSource: Remote Data Collection Upload Tool
+                  germplasmDbId: 2408ab11
+                  germplasmName: A0000003
+                  observationTimeStamp: '2020-08-12T18:10:40.413Z'
+                  observationUnitDbId: 598111d4
+                  observationUnitName: Plot 1
+                  observationVariableDbId: c403d107
+                  observationVariableName: Plant Height in meters
+                  season:
+                    season: Spring
+                    seasonDbId: Spring_2018
+                    year: 2018
+                  studyDbId: ef2829db
+                  uploadedBy: a2f7f60b
+                  value: '2.3'
+                <observationDbId_2>:
+                  additionalInfo: {}
+                  collector: 03ba8c2c
+                  externalReferences:
+                  - referenceID: 75a50e76
+                    referenceSource: Remote Data Collection Upload Tool
+                  germplasmDbId: 69310ca4
+                  germplasmName: A0000438
+                  observationTimeStamp: '2020-08-12T18:10:40.413Z'
+                  observationUnitDbId: 1177a714
+                  observationUnitName: Plot 13
+                  observationVariableDbId: e4f8ba8c
+                  observationVariableName: Carotenoid
+                  season:
+                    season: Spring
+                    seasonDbId: Spring_2018
+                    year: 2018
+                  studyDbId: 6f9e267d
+                  uploadedBy: 182c72ad
+                  value: '2.5'
               type: object
       responses:
         '200':
@@ -7998,83 +8014,6 @@ paths:
       requestBody:
         content:
           application/json:
-            example:
-              <observationUnitDbId_1>:
-                additionalInfo: {}
-                externalReferences:
-                - referenceID: SAMEA_179865230
-                  referenceSource: ebi.biosample
-                germplasmDbId: e9d9ed57
-                germplasmName: A0000001
-                locationDbId: 0e208b20
-                locationName: Field Station Alpha
-                observationLevel: plot
-                observationUnitName: Plot 1
-                observationUnitPosition:
-                  blockNumber: 6
-                  entryNumber: 3
-                  entryType: CHECK
-                  geoCoordinates:
-                    geometry:
-                      coordinates:
-                      - -76.506042
-                      - 42.417373
-                      type: Point
-                    type: Feature
-                  positionCoordinateX: 74
-                  positionCoordinateXType: GRID_COL
-                  positionCoordinateY: 3
-                  positionCoordinateYType: GRID_ROW
-                  replicate: 1
-                plantNumber: 1
-                plotNumber: 1
-                programDbId: 2d763a7a
-                programName: The Perfect Breeding Program
-                studyDbId: 9865addc
-                studyName: Purple_Tomato_1
-                treatments:
-                - factor: fertilizer
-                  modality: low fertilizer
-                trialDbId: 776a609c
-                trialName: Purple Tomato
-              <observationUnitDbId_2>:
-                additionalInfo: {}
-                externalReferences:
-                - referenceID: SAMEA_179865230
-                  referenceSource: ebi.biosample
-                germplasmDbId: e9d9ed57
-                germplasmName: A0000001
-                locationDbId: 0e208b20
-                locationName: Field Station Alpha
-                observationLevel: plot
-                observationUnitName: Plot 1
-                observationUnitPosition:
-                  blockNumber: 6
-                  entryNumber: 3
-                  entryType: CHECK
-                  geoCoordinates:
-                    geometry:
-                      coordinates:
-                      - -76.506042
-                      - 42.417373
-                      type: Point
-                    type: Feature
-                  positionCoordinateX: 74
-                  positionCoordinateXType: GRID_COL
-                  positionCoordinateY: 3
-                  positionCoordinateYType: GRID_ROW
-                  replicate: 1
-                plantNumber: 1
-                plotNumber: 1
-                programDbId: 2d763a7a
-                programName: The Perfect Breeding Program
-                studyDbId: 9865addc
-                studyName: Purple_Tomato_1
-                treatments:
-                - factor: fertilizer
-                  modality: low fertilizer
-                trialDbId: 776a609c
-                trialName: Purple Tomato
             schema:
               additionalProperties:
                 properties:
@@ -8410,6 +8349,105 @@ paths:
                     example: Purple Tomato
                     type: string
                 type: object
+              example:
+                <observationUnitDbId_1>:
+                  additionalInfo: {}
+                  externalReferences:
+                  - referenceID: doi:10.155454/12341234
+                    referenceSource: DOI
+                  germplasmDbId: e9d9ed57
+                  germplasmName: A0000001
+                  locationDbId: 0e208b20
+                  locationName: Field Station Alpha
+                  observationUnitName: Plot 31
+                  observationUnitPUI: http://pui.per/plot/1a9afc14
+                  observationUnitPosition:
+                    entryType: TEST
+                    geoCoordinates:
+                      geometry:
+                        coordinates:
+                        - -76.506042
+                        - 42.417373
+                        - 123
+                        type: Point
+                      type: Feature
+                    observationLevel:
+                      levelCode: Plot_456
+                      levelName: plot
+                      levelOrder: 2
+                    observationLevelRelationships:
+                    - levelCode: Field_1
+                      levelName: field
+                      levelOrder: 0
+                    - levelCode: Block_6
+                      levelName: block
+                      levelOrder: 1
+                    - levelCode: Plot_456
+                      levelName: plot
+                      levelOrder: 2
+                    positionCoordinateX: '78'
+                    positionCoordinateXType: GRID_COL
+                    positionCoordinateY: 08
+                    positionCoordinateYType: GRID_ROW
+                  programDbId: 2d763a7a
+                  programName: The Perfect Breeding Program
+                  seedLotDbId: 261ecb09
+                  studyDbId: 9865addc
+                  studyName: Purple_Tomato_1
+                  treatments:
+                  - factor: fertilizer
+                    modality: low fertilizer
+                  trialDbId: 776a609c
+                  trialName: Purple Tomato
+                <observationUnitDbId_2>:
+                  additionalInfo: {}
+                  externalReferences:
+                  - referenceID: doi:10.155454/12341234
+                    referenceSource: DOI
+                  germplasmDbId: e9d9ed57
+                  germplasmName: A0000001
+                  locationDbId: 0e208b20
+                  locationName: Field Station Alpha
+                  observationUnitName: Plot 17
+                  observationUnitPUI: http://pui.per/plot/1a9afc14
+                  observationUnitPosition:
+                    entryType: TEST
+                    geoCoordinates:
+                      geometry:
+                        coordinates:
+                        - -76.506042
+                        - 42.417373
+                        - 123
+                        type: Point
+                      type: Feature
+                    observationLevel:
+                      levelCode: Plot_123
+                      levelName: plot
+                      levelOrder: 2
+                    observationLevelRelationships:
+                    - levelCode: Field_1
+                      levelName: field
+                      levelOrder: 0
+                    - levelCode: Block_12
+                      levelName: block
+                      levelOrder: 1
+                    - levelCode: Plot_123
+                      levelName: plot
+                      levelOrder: 2
+                    positionCoordinateX: '74'
+                    positionCoordinateXType: GRID_COL
+                    positionCoordinateY: '03'
+                    positionCoordinateYType: GRID_ROW
+                  programDbId: 2d763a7a
+                  programName: The Perfect Breeding Program
+                  seedLotDbId: 261ecb09
+                  studyDbId: 9865addc
+                  studyName: Purple_Tomato_1
+                  treatments:
+                  - factor: fertilizer
+                    modality: low fertilizer
+                  trialDbId: 776a609c
+                  trialName: Purple Tomato
               type: object
       responses:
         '200':
